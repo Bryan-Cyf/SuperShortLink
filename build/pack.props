@@ -1,0 +1,13 @@
+<Project>
+	<PropertyGroup>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<VersionSuffix>0</VersionSuffix>
+		<Version>$(VersionPrefix).$(VersionSuffix)</Version>
+		<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<Authors>Bryan</Authors>
+		<Company>Bryan</Company>
+		<Product>SuperShortLink</Product>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+</Project>

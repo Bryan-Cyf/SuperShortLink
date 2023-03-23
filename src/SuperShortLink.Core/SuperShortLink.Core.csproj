@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\build\pack.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace>SuperShortLink.Core</RootNamespace>
+		<Description>[短链]包含短链生成，长链跳转等功能</Description>
+		<PackageTags>core,short,link</PackageTags>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+		<PackageReference Include="MySql.Data" Version="8.0.32.1" />
+		<PackageReference Include="Npgsql" Version="6.0.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+	</ItemGroup>
+</Project>

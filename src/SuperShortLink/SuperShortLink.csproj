@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>d186dde5-e8ce-46e6-98b8-f4df86615d92</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Dockerfile" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SuperShortLink.Core\SuperShortLink.Core.csproj" />
+	</ItemGroup>
+
+</Project>

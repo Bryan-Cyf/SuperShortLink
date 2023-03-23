@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "记录列表";
+}
+
+<div class="text-center" id="main">
+    <el-card>
+        <el-row>
+            <el-col :span="20">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left" label-width="80px">
+                    <el-form-item label="短链接">
+                        <el-input v-model="query.short_url" placeholder="请输入短链接" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="原始链接">
+                        <el-input v-model="query.origin_url" placeholder="请输入原始链接" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="4">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left">
+                    <el-form-item>
+                        <el-button type="primary" @@click="fetchData" :loading="loading">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @@click="handleClear" plain :loading="loading">清空</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+
+        <el-table :data="tableData.results" border :loading="loading" stripe
+                  style="width: 100%">
+            <el-table-column prop="origin_url"
+                             width="500"
+                             label="原始链接">
+                <template slot-scope="scope">
+                    <el-link size="mini" :href="scope.row.origin_url" type="primary" target="_blank">{{scope.row.origin_url}}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="short_url"
+                             align="center"
+                             width="300"
+                             label="短链接">
+                <template slot-scope="scope">
+                    <el-link size="mini" :href="scope.row.short_url" type="primary" target="_blank">{{window.location.origin}}/{{scope.row.short_url}}</el-link>
+                </template>
+            </el-table-column>
+            <el-table-column prop="access_count"
+                             label="访问次数"
+                             width="100"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="update_time"
+                             label="更新时间"
+                             width="160"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="create_time"
+                             label="创建时间"
+                             width="160"
+                             align="center">
+            </el-table-column>
+        </el-table>
+        <div class="text-right mt-2">
+            <el-pagination @@size-change="handleSizeChange"
+                           @@current-change="handleCurrentChange"
+                           :current-page.sync="query.page_index"
+                           :page-size.sync="query.page_size"
+                           :page-sizes="pageCfg.pageSizes"
+                           :hide-on-single-page="true"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="tableData.total">
+            </el-pagination>
+        </div>
+    </el-card>
+
+    <el-dialog title="请求记录" :visible.sync="requestApi.visible" width="60%">
+        <el-table :data="requestApi.results" border max-height="250">
+            <el-table-column prop="req_id"
+                             label="请求id">
+            </el-table-column>
+            <el-table-column prop="page_index"
+                             label="页码">
+            </el-table-column>
+
+            <el-table-column prop="res_count"
+                             label="返回条数">
+            </el-table-column>
+
+            <el-table-column prop="res_code"
+                             label="返回状态码">
+            </el-table-column>
+
+            <el-table-column prop="res_message"
+                             label="返回Msg">
+            </el-table-column>
+
+            <el-table-column prop="exec_time"
+                             label="请求耗时">
+                <template slot-scope="scope">
+                    <span>{{scope.row.exec_time/1000}}s</span>
+                    <br />
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="create_time"
+                             width="180"
+                             label="创建时间">
+            </el-table-column>
+        </el-table>
+    </el-dialog>
+</div>
+@section Scripts
+    {
+<script>
+    let app = new Vue({
+        el: "#main",
+        data() {
+            return {
+                loading: false,
+                drawer: false,
+                pageCfg: {
+                    pageSizes: [10, 20, 50, 100, 200, 300, 400]
+                },
+                query: {
+                    page_size: 10,
+                    page_index: 1
+                },
+                tableData: {
+                    results: [],
+                    total: 0
+                },
+                tagCalPanel: {
+                    title: '',
+                    rowData: {}
+                },
+                requestApi: {
+                    visible: false,
+                    results: []
+                }
+            }
+        },
+        mounted() {
+
+        },
+        created() {
+            console.log("init!");
+            let _query = sessionStorage.getItem('_query');
+            if (_query) {
+                let obj = JSON.parse(_query);
+                this.query.page_index = Number(obj.page_index);
+                this.query.page_size = obj.page_size;
+                this.query = obj;
+            }
+            this.fetchData();
+        },
+        methods: {
+            handleClear() {
+                this.query = {
+                    task_tatus: '',
+                    batchId: '',
+                    page_size: 10,
+                    page_index: 1
+                }
+                this.fetchData();
+            },
+            handleSizeChange(val) {
+                this.query.page_size = val;
+                this.fetchData();
+            },
+            handleCurrentChange(val) {
+                this.query.page_index = val;
+                this.fetchData();
+            },
+            fetchData() {
+                sessionStorage.setItem("_query", JSON.stringify(this.query));
+                this.loading = true;
+                axios.post("/home/List", this.query).then(res => {
+                    this.tableData = res.data.pageData;
+                    console.log(this.tableData);
+                    this.taskStatus = res.data.taskStatusDic;
+                    // this.taskTypes = res.data.taskTypes;
+                    this.loading = false;
+                }).catch(err => {
+                    this.loading = false;
+                    this.$notify({
+                        message: "请求失败，请检查输入",
+                        type: 'warning'
+                    });
+                });
+            }
+        }
+    })
+</script>
+}

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="FakeItEasy" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\SuperShortLink.Core\SuperShortLink.Core.csproj" />
+	</ItemGroup>
+</Project>

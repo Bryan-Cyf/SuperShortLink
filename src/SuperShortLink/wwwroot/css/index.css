@@ -1,0 +1,74 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #EDEFF4;
+}
+
+.content {
+    border-radius: 3px;
+    border-top: 3px solid #06d6a0;
+    padding: 20px;
+    background-color: #ffffff;
+    margin-top: 100px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    max-width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#inp-url {
+    height: 26px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    min-width: 80%;
+    outline: none;
+    height: 46px;
+}
+
+#but-url {
+    height: 46px;
+    outline: none;
+    font-size: 18px;
+    border-radius: 6px;
+}
+
+/*笔记本 (小于1400px时应用的样式)*/
+@media screen and (max-width: 1400px) {
+    .content {
+        max-width: 60%;
+    }
+
+    #inp-url {
+        min-width: 83%;
+    }
+}
+
+/*手机端 (小于992px时应用的样式)*/
+@media screen and (max-width: 992px) {
+    .content {
+        max-width: 100%;
+        margin-top: 3px;
+    }
+
+    #inp-url {
+        min-width: 100%;
+        height: 26px;
+        padding: 10px 16px;
+        font-size: 18px;
+        line-height: 1.3333333;
+        border-radius: 6px;
+        outline: none;
+        height: 46px;
+    }
+
+    #but-url {
+        margin-top: 8px;
+        min-width: 100%;
+    }
+}
