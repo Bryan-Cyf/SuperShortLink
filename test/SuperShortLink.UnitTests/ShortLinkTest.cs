@@ -18,7 +18,7 @@ namespace SuperShortLink.UnitTests
             IServiceCollection services = new ServiceCollection();
             services.AddShortLink(option =>
             {
-                option.ConnectionString = "Server=192.168.100.3;Port=5432;User Id=ApolloProgram_User;Password=qf0LUpK@;Database=zz_db002;";
+                option.ConnectionString = "Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;";
                 option.DbType = DatabaseType.PostgreSQL;
                 option.Secrect = "s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut";
                 option.CodeLength = 6;
