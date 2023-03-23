@@ -25,12 +25,6 @@
  - 傻瓜式配置，开箱即用
 
 ------
-## Web界面
-![](media/web-login.png?raw=true)
-![](media/web-list.png?raw=true)
-![](media/web-generate.png?raw=true)
-
-------------
 ## 构建项目
 
 ### Step 1 : 打开项目
@@ -101,8 +95,9 @@ CREATE TABLE short_link (
 
 ### Step 4 : F5运行项目
 
----------
-## 基本使用
+------------
+
+## 扩展类库的基本使用
 
 ### Step 1 : 安装包
 
@@ -161,10 +156,15 @@ public class ShortLinkController : Controller
 
 --------
 
+## Web界面
+![](media/web-login.png?raw=true)
+![](media/web-list.png?raw=true)
+![](media/web-generate.png?raw=true)
+
+
+---------
 ## 更多示例
 
-1. 查看 [使用例子]()
-2. 查看 [测试用例]()
-
-## 建表SQL
+1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src/SuperShortLink)
+2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test/SuperShortLink.UnitTests)
 
