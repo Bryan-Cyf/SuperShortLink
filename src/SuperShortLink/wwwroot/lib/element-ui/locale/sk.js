@@ -126,17 +126,14 @@
         hasCheckedFormat: '{checked}/{total} označených'
       },
       image: {
-        error: 'Chyba načítania'
+        error: 'FAILED' // to be translated
       },
       pageHeader: {
-        title: 'Späť'
+        title: 'Back' // to be translated
       },
       popconfirm: {
-        confirmButtonText: 'Potvrdiť',
-        cancelButtonText: 'Zrušiť'
-      },
-      empty: {
-        description: 'Žiadne dáta'
+        confirmButtonText: 'Yes', // to be translated
+        cancelButtonText: 'No' // to be translated
       }
     }
   };

@@ -1,1 +1,0 @@
-export default function ownerDocument(e){return e&&e.ownerDocument||document}
