@@ -12,7 +12,7 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public void AddShortLinkExtensions_Should_Get_Configuration_Succeed()
         {
-            var appsettings = "{\"ShortLink\":{\"Secrect\":\"s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut\",\"CodeLength\":6,\"DbType\":\"PostgreSQL\",\"ConnectionString\":\"Server=192.168.100.3;Port=5432;User Id=ApolloProgram_User;Password=qf0LUpK@;Database=zz_db002;\",\"LoginAcount\":\"admin\",\"LoginPassword\":\"123456\"}}";
+            var appsettings = "{\"ShortLink\":{\"Secrect\":\"s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut\",\"CodeLength\":6,\"DbType\":\"PostgreSQL\",\"ConnectionString\":\"Server=Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;\",\"LoginAcount\":\"admin\",\"LoginPassword\":\"123456\"}}";
             var path = TestHelper.CreateTempFile(appsettings);
             var directory = Path.GetDirectoryName(path);
             var fileName = Path.GetFileName(path);

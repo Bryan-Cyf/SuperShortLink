@@ -7,7 +7,7 @@
 
 | Package Name |  Version | Downloads
 |--------------|  ------- | ----
-| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.0.0-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
+| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.1.0-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
 
 ---------
 
@@ -25,14 +25,79 @@
  - 傻瓜式配置，开箱即用
 
 ------
-## Web界面
-![](media/web-login.png?raw=true)
-![](media/web-list.png?raw=true)
-![](media/web-generate.png?raw=true)
+## 构建项目
+
+### Step 1 : 打开项目
+打开 SuperShortLink.sln
+
+### Step 2 : 配置数据库
+可选：MySQL/PostgreSQL/SqlServer(2012及以上)
+在`appsetting.json`文件中更新连接字符串
+```
+"ShortLink": {
+    "Secrect": "s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut",// 62 位秘钥
+    "CodeLength": 6, //短链长度
+    "DbType": "PostgreSQL", //DatabaseType:MySQL/PostgreSQL/SqlServer(仅支持SQL Server 2012以上)
+    "ConnectionString": "Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;",//数据库链接字符串
+    "LoginAcount": "admin",//登陆账号
+    "LoginPassword": "123456"//登陆密码
+}
+```
+### Step 3 : 执行数据库建表SQL
+
+#### MySQL
+```
+-- ----------------------------
+-- MySQL
+-- ----------------------------
+CREATE TABLE short_link (
+    id            INT(11)      NOT NULL AUTO_INCREMENT,
+    short_url     VARCHAR(255) NOT NULL,
+    origin_url    VARCHAR(255) NOT NULL,
+    create_time   TIMESTAMP(0) NOT NULL,
+    update_time   TIMESTAMP(0) NOT NULL,
+    access_count  INT(11)      NOT NULL,
+PRIMARY KEY (id) USING BTREE 
+)
+```
+
+#### PostgreSQL
+```
+-- ----------------------------
+-- PostgreSQL
+-- ----------------------------
+CREATE TABLE short_link (
+    id            SERIAL        NOT NULL,
+    short_url     VARCHAR(128)  NOT NULL,
+    origin_url    VARCHAR(128)  NOT NULL,
+    create_time   TIMESTAMP     NOT NULL,
+    update_time   TIMESTAMP     NOT NULL,
+    access_count  INT4          NOT NULL
+CONSTRAINT pk_short_link PRIMARY KEY ( id ) 
+);
+
+```
+#### SQLServer
+
+```
+-- ----------------------------
+-- SQLServer
+-- ----------------------------
+CREATE TABLE short_link (
+    id           INT PRIMARY KEY IDENTITY(1,1),
+    short_url    VARCHAR(255) NOT NULL,
+    origin_url   VARCHAR(255) NOT NULL,
+    create_time  datetime2(0) NOT NULL,
+    update_time  datetime2(0) NOT NULL,
+    access_count INT NOT NULL 
+);
+```
+
+### Step 4 : F5运行项目
 
 ------------
 
-## 基本使用
+## 扩展类库的基本使用
 
 ### Step 1 : 安装包
 
@@ -91,58 +156,15 @@ public class ShortLinkController : Controller
 
 --------
 
+## Web界面
+![](media/web-login.png?raw=true)
+![](media/web-list.png?raw=true)
+![](media/web-generate.png?raw=true)
+
+
+---------
 ## 更多示例
 
-1. 查看 [使用例子]()
-2. 查看 [测试用例]()
-
-## 建表SQL
-
-### MySQL
-```
--- ----------------------------
--- MySQL
--- ----------------------------
-CREATE TABLE short_link (
-    id            INT(11)      NOT NULL AUTO_INCREMENT,
-    short_url     VARCHAR(255) NOT NULL,
-    origin_url    VARCHAR(255) NOT NULL,
-    create_time   TIMESTAMP(0) NOT NULL,
-    update_time   TIMESTAMP(0) NOT NULL,
-    access_count  INT(11)      NOT NULL,
-PRIMARY KEY ( id ) USING BTREE 
-)
-```
-
-### PostgreSQL
-```
--- ----------------------------
--- PostgreSQL
--- ----------------------------
-CREATE TABLE short_link (
-    id              SERIAL          NOT NULL,
-    short_url       VARCHAR(128)    NOT NULL,
-    origin_url      VARCHAR(128)    NOT NULL,
-    create_time	    TIMESTAMP       NOT NULL,
-    update_time     TIMESTAMP       NOT NULL,
-    access_count    INT4            NOT NULL
-CONSTRAINT pk_short_link PRIMARY KEY (id) 
-);
-
-```
-### SQLServer
-
-```
--- ----------------------------
--- SQLServer
--- ----------------------------
-CREATE TABLE short_link (
-	id           INT PRIMARY KEY IDENTITY(1,1),
-	short_url    VARCHAR(255) NOT NULL,
-	origin_url   VARCHAR(255) NOT NULL,
-	create_time  datetime2(0) NOT NULL,
-	update_time  datetime2(0) NOT NULL,
-	access_count INT NOT NULL 
-);
-```
+1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src/SuperShortLink)
+2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test/SuperShortLink.UnitTests)
 

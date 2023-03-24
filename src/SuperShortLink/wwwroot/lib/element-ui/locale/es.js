@@ -25,7 +25,7 @@
         now: 'Ahora',
         today: 'Hoy',
         cancel: 'Cancelar',
-        clear: 'Limpiar',
+        clear: 'Despejar',
         confirm: 'Confirmar',
         selectDate: 'Seleccionar fecha',
         selectTime: 'Seleccionar hora',
@@ -108,7 +108,7 @@
         emptyText: 'Sin Datos',
         confirmFilter: 'Confirmar',
         resetFilter: 'Reiniciar',
-        clearFilter: 'Limpiar',
+        clearFilter: 'Despejar',
         sumText: 'Suma'
       },
       tree: {
@@ -131,9 +131,6 @@
       popconfirm: {
         confirmButtonText: 'Si',
         cancelButtonText: 'No'
-      },
-      empty: {
-        description: 'Sin Datos'
       }
     }
   };
