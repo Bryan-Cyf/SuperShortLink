@@ -9,13 +9,13 @@ namespace SuperShortLink.Repository
 {
     public class BaseRepository
     {
-        protected readonly IDbConnection _dbConnection;
-        protected readonly DatabaseType _dbType;
+        private readonly DatabaseType _dbType;
+        private readonly string _connectionString;
 
         public BaseRepository(IOptionsSnapshot<ShortLinkOptions> options)
         {
             _dbType = options.Value.DbType;
-            _dbConnection = ConnectionFactory.CreateConnection(options.Value.DbType, options.Value.ConnectionString);
+            _connectionString = options.Value.ConnectionString;
         }
 
         /// <summary>
@@ -37,11 +37,38 @@ namespace SuperShortLink.Repository
 
             string countSql = $"select count(1)  from  {sql.Remove(0, sql.IndexOf("from", StringComparison.Ordinal) + 4)} ";
 
-            result.total = await _dbConnection.ExecuteScalarAsync<long>(countSql, param);
-            result.results = await _dbConnection.QueryAsync<T>(pageSql, param);
+            using (var conn = ConnectionFactory.CreateConnection(_dbType, _connectionString))
+            {
+                result.total = await conn.ExecuteScalarAsync<long>(countSql, param);
+                result.results = await conn.QueryAsync<T>(pageSql, param);
+            }
             result.currentPage = page.page_index;
             result.pages = (long)Math.Ceiling(result.total * 1.0 / page.page_size);
             return result;
+        }
+
+        protected async Task<T> ExecuteScalarAsync<T>(string sql, object param = null)
+        {
+            using (var conn = ConnectionFactory.CreateConnection(_dbType, _connectionString))
+            {
+                return await conn.ExecuteScalarAsync<T>(sql, param);
+            }
+        }
+
+        protected async Task<int> ExecuteAsync(string sql, object param = null)
+        {
+            using (var conn = ConnectionFactory.CreateConnection(_dbType, _connectionString))
+            {
+                return await conn.ExecuteAsync(sql, param);
+            }
+        }
+
+        protected async Task<T> QueryFirstOrDefaultAsync<T>(string sql, object param = null)
+        {
+            using (var conn = ConnectionFactory.CreateConnection(_dbType, _connectionString))
+            {
+                return await conn.QueryFirstOrDefaultAsync<T>(sql, param);
+            }
         }
     }
 }

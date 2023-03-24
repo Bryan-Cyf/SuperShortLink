@@ -32,7 +32,7 @@ namespace SuperShortLink.Repository
 
             sb.Append($"select {_autoIncrementSql};");
 
-            var result = await _dbConnection.ExecuteScalarAsync<int>(sb.ToString(), model);
+            var result = await base.ExecuteScalarAsync<int>(sb.ToString(), model);
             return result;
         }
 
@@ -53,7 +53,7 @@ namespace SuperShortLink.Repository
                 short_url = model.short_url,
                 update_time = DateTime.Now
             };
-            var result = await _dbConnection.ExecuteAsync(sqlstr, param);
+            var result = await base.ExecuteAsync(sqlstr, param);
             return result;
         }
 
@@ -73,7 +73,7 @@ namespace SuperShortLink.Repository
                 Id = id,
                 update_time = DateTime.Now
             };
-            var result = await _dbConnection.ExecuteAsync(sqlstr, param);
+            var result = await base.ExecuteAsync(sqlstr, param);
             return result;
         }
 
@@ -89,7 +89,7 @@ namespace SuperShortLink.Repository
             {
                 Id = id,
             };
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<string>(sqlstr, param);
+            var result = await base.QueryFirstOrDefaultAsync<string>(sqlstr, param);
             return result;
         }
 
@@ -105,7 +105,7 @@ namespace SuperShortLink.Repository
             {
                 Id = id,
             };
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<UrlRecordModel>(sqlstr, param);
+            var result = await base.QueryFirstOrDefaultAsync<UrlRecordModel>(sqlstr, param);
             return result;
         }
 
