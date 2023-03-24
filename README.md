@@ -12,7 +12,7 @@
 ---------
 
 # `SuperShortLink`
-> 是一个基于.NET开源的短链生成及监控系统，它包含了短链的生成、短链跳转长链、短链访问次数以及Web监控页面，可以帮助我们更容易地生成短链、监控短链！
+> 这是一个基于.NET开源的短链生成及监控系统，它包含了在线生成短链、短链跳转长链、支持短链访问次数以及Web监控页面，可以帮助我们更容易地生成短链、监控短链！
 
 -------
 
@@ -31,13 +31,13 @@
 打开 SuperShortLink.sln
 
 ### Step 2 : 配置数据库
-可选：MySQL/PostgreSQL/SqlServer(2012及以上)
-在`appsetting.json`文件中更新连接字符串
+- 可选：`MySQL`/`PostgreSQL`/`SqlServer`(2012及以上)
+- 在`appsetting.json`文件中更新连接字符串
 ```
 "ShortLink": {
     "Secrect": "s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut",// 62 位秘钥
     "CodeLength": 6, //短链长度
-    "DbType": "PostgreSQL", //DatabaseType:MySQL/PostgreSQL/SqlServer(仅支持SQL Server 2012以上)
+    "DbType": "PostgreSQL", //DatabaseType:MySQL/PostgreSQL/SqlServer(仅支持SQL Server2012及以上)
     "ConnectionString": "Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;",//数据库链接字符串
     "LoginAcount": "admin",//登陆账号
     "LoginPassword": "123456"//登陆密码
@@ -94,9 +94,17 @@ CREATE TABLE short_link (
 ```
 
 ### Step 4 : 运行项目
-管理后台:{域名}/home/index
+- 管理后台：{域名}/home/index
+- 默认登陆账号密码：admin 123456
+- 如需修改账号密码，更新`appsetting.json`的LoginAcount及LoginPassword即可
 
 ------------
+
+## Web界面
+![](media/web-login.png?raw=true)
+![](media/web-list.png?raw=true)
+![](media/web-generate.png?raw=true)
+
 
 ## 扩展类库的基本使用
 
@@ -156,12 +164,6 @@ public class ShortLinkController : Controller
 ```
 
 --------
-
-## Web界面
-![](media/web-login.png?raw=true)
-![](media/web-list.png?raw=true)
-![](media/web-generate.png?raw=true)
-
 
 ---------
 ## 更多示例
