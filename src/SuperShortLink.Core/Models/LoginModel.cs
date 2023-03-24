@@ -17,4 +17,9 @@ namespace SuperShortLink.Models
             Password = pwd;
         }
     }
+
+    public class LoginConst
+    {
+        public static string CacheKey = "LoginCache";
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using SuperShortLink.Cache;
 using SuperShortLink.Helpers;
 using SuperShortLink.Models;
 using SuperShortLink.Repository;
@@ -10,13 +11,17 @@ namespace SuperShortLink
     [Route("[controller]/[Action]")]
     public class HomeController : Controller
     {
+        private readonly IMemoryCaching _memory;
         private readonly IShortLinkService _shortLinkService;
         private readonly IShortLinkRepository _shortLinkRepository;
 
-        public HomeController(IShortLinkService shortLinkService, IShortLinkRepository shortLinkRepository)
+        public HomeController(IShortLinkService shortLinkService, 
+            IShortLinkRepository shortLinkRepository, 
+            IMemoryCaching memory)
         {
             _shortLinkService = shortLinkService;
             _shortLinkRepository = shortLinkRepository;
+            _memory = memory;
         }
 
         #region Auth
@@ -27,11 +32,18 @@ namespace SuperShortLink
 
             var ignore = context.HttpContext.GetEndpoint().Metadata.GetMetadata<AllowAnonymousAttribute>();
 
+            var isRedirect = true;
             if (!string.IsNullOrEmpty(token) || ignore != null)
             {
-                base.OnActionExecuting(context);
+                var loginCache = _memory.Get<string>(LoginConst.CacheKey);
+                if(!loginCache.IsNull && loginCache.Value == token)
+                {
+                    isRedirect = false;
+                    base.OnActionExecuting(context);
+                }
             }
-            else
+
+            if (isRedirect)
             {
                 context.HttpContext.Response.Redirect("/Login/Index");
             }
