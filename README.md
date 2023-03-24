@@ -93,7 +93,8 @@ CREATE TABLE short_link (
 );
 ```
 
-### Step 4 : F5运行项目
+### Step 4 : 运行项目
+管理后台:{域名}/home/index
 
 ------------
 
