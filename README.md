@@ -7,7 +7,7 @@
 
 | Package Name |  Version | Downloads
 |--------------|  ------- | ----
-| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.1.0-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
+| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.1.1-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
 
 ---------
 
@@ -162,8 +162,6 @@ public class ShortLinkController : Controller
     }
 }
 ```
-
---------
 
 ---------
 ## 更多示例

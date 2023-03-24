@@ -7,8 +7,12 @@
 		<Description>[短链]包含短链生成，长链跳转等功能</Description>
 		<PackageProjectUrl>https://github.com/Bryan-Cyf/SuperShortLink</PackageProjectUrl>
 		<PackageTags>core,short,link</PackageTags>
+		<PackageIcon>nuget-icon.png</PackageIcon>
 	</PropertyGroup>
-
+	
+	<ItemGroup>
+		<None Include="../../media/nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
