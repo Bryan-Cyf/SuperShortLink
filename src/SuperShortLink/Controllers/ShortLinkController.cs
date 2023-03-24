@@ -2,7 +2,7 @@
 
 namespace SuperShortLink
 {
-    [Route("api/[controller]/[Action]")]
+    //[Route("[controller]/[Action]")]
     public class ShortLinkController : Controller
     {
         private readonly IShortLinkService _shortLinkService;
@@ -11,16 +11,15 @@ namespace SuperShortLink
             _shortLinkService = shortLinkService;
         }
 
-        /// <summary>
-        /// 解析生成短网址，并保存到数据库
-        /// </summary>
-        /// <param name="url">长链接</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<string> Generate(string url)
+        [HttpGet("{key?}")]
+        public async Task<IActionResult> Access(string key)
         {
-            var short_url = await _shortLinkService.GenerateAsync(url);
-            return short_url;
+            var url = await _shortLinkService.AccessAsync(key);
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                return Redirect(url);
+            }
+            return new NotFoundResult();
         }
     }
 }

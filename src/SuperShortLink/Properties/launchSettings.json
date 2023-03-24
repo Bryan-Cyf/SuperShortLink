@@ -11,6 +11,8 @@
     "SuperShortLink": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:5000",
+      "launchUrl": "Home/Index",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

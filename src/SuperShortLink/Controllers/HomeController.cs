@@ -7,6 +7,7 @@ using SuperShortLink.Repository;
 
 namespace SuperShortLink
 {
+    [Route("[controller]/[Action]")]
     public class HomeController : Controller
     {
         private readonly IShortLinkService _shortLinkService;
@@ -40,19 +41,9 @@ namespace SuperShortLink
 
         #region Page
 
-        [HttpGet("{key?}")]
-        public async Task<IActionResult> Index(string key)
+        public IActionResult Index()
         {
-            if (string.IsNullOrWhiteSpace(key))
-                return View();
-
-            var url = await _shortLinkService.AccessAsync(key);
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                return Redirect(url);
-            }
-
-            return new NotFoundResult();
+            return View();
         }
 
         public IActionResult Transfer()

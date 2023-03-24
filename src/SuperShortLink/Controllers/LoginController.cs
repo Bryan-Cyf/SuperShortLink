@@ -4,6 +4,7 @@ using SuperShortLink.Models;
 
 namespace SuperShortLink
 {
+    [Route("[controller]/[Action]")]
     public class LoginController : Controller
     {
 
@@ -29,7 +30,7 @@ namespace SuperShortLink
             {
                 HttpContext.Response.Cookies.Append("token", Guid.NewGuid().ToString(),
                     new CookieOptions() { HttpOnly = true, Expires = DateTimeOffset.Now.AddDays(1) });
-                return Redirect("/");
+                return Redirect("/Home/Index");
             }
 
             return View(nameof(Index));
