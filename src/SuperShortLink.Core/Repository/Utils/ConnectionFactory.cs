@@ -57,10 +57,6 @@ namespace SuperShortLink.Repository
                     throw new ArgumentNullException($"不支持的{dbType.ToString()}数据库类型");
 
             }
-            if (connection.State == ConnectionState.Closed)
-            {
-                connection.Open();
-            }
             return connection;
         }
 

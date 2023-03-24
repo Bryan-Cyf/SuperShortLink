@@ -32,7 +32,7 @@ namespace SuperShortLink.Repository
 
             sb.Append($"select {_autoIncrementSql};");
 
-            var result = await _dbConnection.QueryFirstOrDefaultAsync<int>(sb.ToString(), model);
+            var result = await _dbConnection.ExecuteScalarAsync<int>(sb.ToString(), model);
             return result;
         }
 
