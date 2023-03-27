@@ -17,7 +17,6 @@
 	  <None Include="..\..\.editorconfig" Link=".editorconfig" />
 	  <None Include="wwwroot\lib\axios\axios.min.js" />
 	  <None Include="wwwroot\lib\axios\axios.min.map" />
-	  <None Include="wwwroot\lib\bootstrap-v4-rtl\css\bootstrap.min.css.map" />
 	  <None Include="wwwroot\lib\bootstrap-v4-rtl\js\bootstrap.js" />
 	  <None Include="wwwroot\lib\bootstrap-v4-rtl\js\bootstrap.js.map" />
 	  <None Include="wwwroot\lib\element-ui\index.js" />
