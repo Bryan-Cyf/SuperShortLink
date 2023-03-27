@@ -73,7 +73,7 @@ CREATE TABLE short_link (
     create_time   TIMESTAMP     NOT NULL,
     update_time   TIMESTAMP     NOT NULL,
     access_count  INT4          NOT NULL
-CONSTRAINT pk_short_link PRIMARY KEY ( id ) 
+CONSTRAINT pk_short_link PRIMARY KEY (id) 
 );
 
 ```
