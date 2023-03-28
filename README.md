@@ -36,7 +36,7 @@
 - 在`appsetting.json`文件中更新连接字符串
 ```
 "ShortLink": {
-    "Secrect": "s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKut",// 62 位秘钥
+    "Secrect": "vZCN8VhSge13UQrYjBTwKulWqsIOAocL0DkmRdxPMJf5tiHbn72z69aXpGyFE4",// 62位秘钥
     "CodeLength": 6, //短链长度
     "DbType": "PostgreSQL", //DatabaseType:MySQL/PostgreSQL/SqlServer(仅支持SQL Server2012及以上)
     "ConnectionString": "Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;",//数据库链接字符串
