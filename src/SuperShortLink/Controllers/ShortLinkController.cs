@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuperShortLink.Models;
 
 namespace SuperShortLink
 {
-    //[Route("[controller]/[Action]")]
+    [ApiAuthrize]
+    [Route("api/[controller]/[Action]")]
     public class ShortLinkController : Controller
     {
         private readonly IShortLinkService _shortLinkService;
@@ -11,15 +13,24 @@ namespace SuperShortLink
             _shortLinkService = shortLinkService;
         }
 
-        [HttpGet("{key?}")]
-        public async Task<IActionResult> Access(string key)
+        /// <summary>
+        /// 解析生成短网址，并保存到数据库
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Generate([FromBody] ApiGenerateRequest request)
         {
-            var url = await _shortLinkService.AccessAsync(key);
-            if (!string.IsNullOrWhiteSpace(url))
+            var result = new ResponseModel<string>();
+            result.resultData = await _shortLinkService.GenerateAsync(request.generate_url);
+            if (!string.IsNullOrEmpty(result.resultData))
             {
-                return Redirect(url);
+                result.SetSuccess();
             }
-            return new NotFoundResult();
+            else
+            {
+                result.SetError();
+            }
+
+            return base.Json(result);
         }
     }
 }

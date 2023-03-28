@@ -74,7 +74,7 @@ namespace SuperShortLink
         public async Task<IActionResult> ApplicationList([FromBody] ApplicationListRequest request)
         {
             var result = await _applicationService.QueryPageAsync(request);
-            return Ok(result);
+            return base.Json(result, DateTimeConvertor.Serializer);
         }
 
         /// <summary>
