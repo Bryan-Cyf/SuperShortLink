@@ -15,20 +15,6 @@ namespace SuperShortLink
         Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto);
 
         /// <summary>
-        /// 【混淆加密】10进制转换为62进制
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        string ConfusionConvert(long id);
-
-        /// <summary>
-        /// 【恢复混淆】将62进制转为10进制
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        long ReConfusionConvert(string key);
-
-        /// <summary>
         /// 生成短链
         /// </summary>
         /// <param name="url"></param>

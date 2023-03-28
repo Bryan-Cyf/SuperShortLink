@@ -58,6 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IApplicationRepository, ApplicationRepository>();
 
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
+            services.AddTransient<Base62Converter>();
             return services;
         }
     }

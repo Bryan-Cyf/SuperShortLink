@@ -12,7 +12,7 @@ namespace SuperShortLink.UnitTests
         private readonly IMemoryCaching _memory;
         private readonly IShortLinkService _shortLinkService;
         private readonly IShortLinkRepository _repository;
-
+        private readonly Base62Converter _converter;
         public ShortLinkTest()
         {
             IServiceCollection services = new ServiceCollection();
@@ -28,6 +28,14 @@ namespace SuperShortLink.UnitTests
             _shortLinkService = serviceProvider.GetService<IShortLinkService>();
             _repository = serviceProvider.GetService<IShortLinkRepository>();
             _memory = serviceProvider.GetService<IMemoryCaching>();
+            _converter = serviceProvider.GetService<Base62Converter>();
+        }
+
+        [Fact]
+        public void Generate_Key_Be_Valid()
+        {
+            var key = _converter.GenerateKeys();
+            Assert.NotNull(key);
         }
 
         [Fact]
@@ -43,25 +51,12 @@ namespace SuperShortLink.UnitTests
         }
 
         [Fact]
-        public void Confuse_Should_Be_Same()
-        {
-            var id = int.MaxValue;
-            //混淆加密
-            var shortLink = _shortLinkService.ConfusionConvert(id);
-            Assert.NotNull(shortLink);
-
-            //解密-恢复混淆
-            var reId = _shortLinkService.ReConfusionConvert(shortLink);
-            Assert.Equal(reId, id);
-        }
-
-        [Fact]
         public async Task Count_Should_Add_When_Aceess()
         {
             var shortLink = await _shortLinkService.GenerateAsync("http://www.baidu.com");
             Assert.NotNull(shortLink);
 
-            var reId = _shortLinkService.ReConfusionConvert(shortLink);
+            var reId = _converter.ReCoverConfuse(shortLink);
             Assert.True(reId > 0);
 
             var model = await _repository.GetAsync(reId);
@@ -90,6 +85,27 @@ namespace SuperShortLink.UnitTests
             var cache = _memory.Get<string>(key);
             Assert.False(cache.IsNull);
             Assert.Equal(value, cache.Value);
+        }
+
+        [Fact]
+        public void Base64_Convert_Should_Be_Same()
+        {
+            var convert = _converter.ToBase62String(10);
+            Assert.NotEmpty(convert);
+
+            var digit = _converter.ConvertFromBase62(convert);
+            Assert.NotEqual(10L, digit);
+        }
+
+        [Fact]
+        public void Convert_Should_Be_Same()
+        {
+            var initDigit = 1000000L;
+            var convert = _converter.Confuse(initDigit);
+            Assert.NotEmpty(convert);
+
+            var digit = _converter.ReCoverConfuse(convert);
+            Assert.Equal(initDigit, digit);
         }
     }
 }
