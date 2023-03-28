@@ -18,7 +18,6 @@
 		<PackageReference Include="FakeItEasy" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\SuperLink.Api\SuperLink.Api.csproj" />
 	  <ProjectReference Include="..\..\src\SuperShortLink.Core\SuperShortLink.Core.csproj" />
 	</ItemGroup>
 </Project>
