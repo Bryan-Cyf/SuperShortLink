@@ -7,7 +7,8 @@
 
 | Package Name |  Version | Downloads
 |--------------|  ------- | ----
-| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.1.1-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
+| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.2.0-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
+| SuperShortLink.Api | ![](https://img.shields.io/badge/nuget-v1.2.0-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
 
 ---------
 
