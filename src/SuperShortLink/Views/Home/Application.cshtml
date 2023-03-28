@@ -1,0 +1,327 @@
+﻿@{
+    ViewData["Title"] = "授权应用";
+}
+
+<div class="text-center" id="main">
+    <el-card>
+        <el-row>
+            <el-col :span="20">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left" label-width="80px">
+                    <el-form-item label="应用CODE">
+                        <el-input v-model="query.app_code" placeholder="请输入应用CODE" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用名称">
+                        <el-input v-model="query.app_name" placeholder="请输入应用名称" @@keyup.enter.native="fetchData" clearable></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="4">
+                <el-form inline :model="query" size="small" :loading="loading" class="text-left">
+                    <el-form-item>
+                        <el-button type="primary" @@click="fetchData" :loading="loading">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @@click="handleClear" plain :loading="loading">清空</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <i class="el-icon-arrow-down" @@click="showCtrl = true" v-show="!showCtrl" style="cursor: pointer;"></i>
+                        <i class="el-icon-arrow-up" @@click="showCtrl = false" v-show="showCtrl" style="cursor: pointer;"></i>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row v-show="showCtrl">
+            <el-divider></el-divider>
+            <el-col>
+                <el-form inline label-width="80px" size="small" class="text-left">
+                    <el-form-item>
+                        <el-button type="primary" size="small" @@click="handleAdd" :loading="loading">新增</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+
+        <el-table :data="tableData.results" border :loading="loading" stripe
+                  style="width: 100%">
+            <el-table-column prop="app_code"
+                             align="center"
+                             width="160"
+                             label="应用Code">
+            </el-table-column>
+            <el-table-column prop="app_secret"
+                             align="center"
+                             width="350"
+                             label="应用Secret">
+            </el-table-column>
+            <el-table-column prop="app_name"
+                             align="center"
+                             width="160"
+                             label="应用名称">
+            </el-table-column>
+            <el-table-column prop="remark"
+                             align="center"
+                             label="备注"
+                             width="140">
+            </el-table-column>
+            <el-table-column prop="create_time"
+                             label="创建时间"
+                             width="200"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="update_time"
+                             label="更新时间"
+                             width="200"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="ctrl"
+                             width="120"
+                             label="操作"
+                             align="center">
+                <template slot-scope="scope">
+                    <el-link size="mini" @@click="handleCtrlOpen(scope.row)" type="success">面板</el-link>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="text-right mt-2">
+            <el-pagination @@size-change="handleSizeChange"
+                           @@current-change="handleCurrentChange"
+                           :current-page.sync="query.page_index"
+                           :page-size.sync="query.page_size"
+                           :page-sizes="pageCfg.pageSizes"
+                           :hide-on-single-page="true"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="tableData.total">
+            </el-pagination>
+        </div>
+    </el-card>
+
+    <el-dialog title="新增应用" :visible.sync="dgAddVisible">
+        <el-form :model="addForm" size="small">
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="应用CODE" label-width="80px">
+                        <el-input v-model="addForm.app_code"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="应用名称" label-width="80px">
+                        <el-input v-model="addForm.app_name"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="24">
+                    <el-form-item label="应用备注" label-width="80px">
+                        <el-input type="textarea" :rows="2" v-model="addForm.remark"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button size="small" @@click="dgAddVisible = false" :loading="loading">取 消</el-button>
+            <el-button size="small" type="primary" :loading="loading" @@click="handleAddSave">保 存</el-button>
+        </div>
+    </el-dialog>
+
+    <el-drawer :title="ctrlPanel.title"
+               :visible.sync="drawer"
+               :before-close="handleCtrlClose">
+        <el-divider content-position="center">应用信息</el-divider>
+        <el-row :gutter="20">
+            <el-col :offset="1">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left">
+                    <el-form-item label="重置Secret：">
+                        <el-button type="primary" @@click="handleUpdateSecret()" :loading="loading">执行</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="query.app_secret" placeholder="请输入，不填则新生成" clearable></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :offset="1">
+                <el-form inline :model="query" size="small " :loading="loading" class="text-left">
+                    <el-form-item label="删除此应用：">
+                        <el-button type="danger" @@click="deleteApplication()" :loading="loading">删除</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+
+    </el-drawer>
+</div>
+@section Scripts
+    {
+    <script>
+        let app = new Vue({
+            el: "#main",
+            data() {
+                return {
+                    loading: false,
+                    drawer: false,
+                    showCtrl: true,
+                    dgAddVisible: false,
+                    addForm: {
+                    },
+                    pageCfg: {
+                        pageSizes: [10, 20, 50, 100, 200, 300, 400]
+                    },
+                    query: {
+                        page_size: 10,
+                        page_index: 1,
+                    },
+                    tableData: {
+                        results: [],
+                        total: 0
+                    },
+                    ctrlPanel: {
+                        title: '',
+                        rowData: {}
+                    }
+                }
+            },
+            mounted() {
+                console.log("init!");
+                this.fetchData();
+            },
+            methods: {
+                handleCtrlOpen(row) {
+                    console.log(row);
+                    this.ctrlPanel.title = `【${row.app_name}--${row.app_code}】`;
+                    this.ctrlPanel.rowData = row;
+                    this.drawer = true;
+                },
+                handleCtrlClose(done) {
+                    this.query.app_secret = '';
+                    done();
+                },
+                handleClear() {
+                    this.query = {
+                        page_size: 10,
+                        page_index: 1
+                    }
+                    this.fetchData();
+                },
+                handleSizeChange(val) {
+                    this.query.page_size = val;
+                    this.fetchData();
+                },
+                handleCurrentChange(val) {
+                    this.query.page_index = val;
+                    this.fetchData();
+                },
+                fetchData() {
+                    localStorage.setItem("_query", JSON.stringify(this.query));
+                    this.loading = true;
+                    axios.post("/home/ApplicationList", this.query).then(res => {
+                        this.tableData = res.data;
+                        this.loading = false;
+
+                        console.log(this.tableData);
+                    }).catch(err => {
+                        this.loading = false;
+                        this.$notify({
+                            message: "请求失败，请检查输入",
+                            type: 'warning'
+                        });
+                    });
+                },
+                handleAdd() {
+                    this.dgAddVisible = true;
+                },
+                handleAddSave() {
+                    this.loading = true;
+                    axios.post('/Home/AddApplication', this.addForm).then(res => {
+                        this.loading = false;
+                        this.$notify({
+                            message: "新增成功",
+                            type: 'success'
+                        });
+                        this.dgAddVisible = false;
+                        this.fetchData();
+                        this.addForm = {};
+                    }).catch(err => {
+                        this.loading = false;
+                        this.$notify({
+                            message: "执行失败，请重试",
+                            type: 'error'
+                        });
+                    });
+                },
+                handleUpdateSecret() {
+                    let appId = this.ctrlPanel.rowData.app_id;
+                    this.$confirm('此操作将重置应用密钥, 是否继续?',
+                        '提示',
+                        {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.loading = true;
+                            axios.post("/Home/UpdateApplicationSecret",
+                                {
+                                    appId: appId,
+                                    appSecret: this.query.app_secret
+                                }).then(res => {
+                                    this.$notify({
+                                        message: "执行成功",
+                                        type: 'success'
+                                    });
+                                    this.loading = false;
+                                    this.fetchData();
+                                }).catch(err => {
+                                    this.loading = false;
+                                    this.$notify({
+                                        message: "执行失败，请重试",
+                                        type: 'error'
+                                    });
+                                });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消操作'
+                            });
+                        });
+                },
+                deleteApplication() {
+                    let row = this.ctrlPanel.rowData;
+                    this.$confirm('此操作将删除应用, 是否继续?',
+                        '警告',
+                        {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.loading = true;
+                            axios.post("/Home/DeleteApplication",
+                                {
+                                    appId: row.app_id,
+                                    queueName: row.queue_name,
+                                    threadCount: this.query.threadCount,
+                                    oldThreadCount: row.queue_thread_count
+                                }).then(res => {
+                                    this.$notify({
+                                        message: "执行成功",
+                                        type: 'success'
+                                    });
+                                    this.loading = false;
+                                    this.fetchData();
+                                }).catch(err => {
+                                    this.loading = false;
+                                    this.$notify({
+                                        message: "执行失败，请重试",
+                                        type: 'error'
+                                    });
+                                });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消操作'
+                            });
+                        });
+                }
+            }
+        })
+    </script>
+}

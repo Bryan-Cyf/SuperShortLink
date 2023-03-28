@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SuperShortLink.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ namespace SuperShortLink
 {
     public interface IShortLinkService
     {
+        /// <summary>
+        /// 分页查询短链信息
+        /// </summary>
+        Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto);
 
         /// <summary>
         /// 【混淆加密】10进制转换为62进制

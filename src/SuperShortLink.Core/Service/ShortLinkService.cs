@@ -68,6 +68,14 @@ namespace SuperShortLink
         }
 
         /// <summary>
+        /// 分页查询短链信息
+        /// </summary>
+        public async Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto)
+        {
+            return await _repository.GetListAsync(dto);
+        }
+
+        /// <summary>
         /// 访问短链
         /// </summary>
         /// <param name="shortKey"></param>

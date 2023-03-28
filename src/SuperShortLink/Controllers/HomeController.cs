@@ -8,64 +8,24 @@ using SuperShortLink.Repository;
 
 namespace SuperShortLink
 {
-    [Route("[controller]/[Action]")]
+    [LoginAuthrize]
     public class HomeController : Controller
     {
-        private readonly IMemoryCaching _memory;
         private readonly IShortLinkService _shortLinkService;
-        private readonly IShortLinkRepository _shortLinkRepository;
-
-        public HomeController(IShortLinkService shortLinkService, 
-            IShortLinkRepository shortLinkRepository, 
-            IMemoryCaching memory)
+        private readonly IApplicationService _applicationService;
+        public HomeController(IShortLinkService shortLinkService
+            , IApplicationService applicationService)
         {
             _shortLinkService = shortLinkService;
-            _shortLinkRepository = shortLinkRepository;
-            _memory = memory;
+            _applicationService = applicationService;
         }
 
-        #region Auth
-
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            var token = context.HttpContext.Request.Cookies["token"];
-
-            var ignore = context.HttpContext.GetEndpoint().Metadata.GetMetadata<AllowAnonymousAttribute>();
-
-            var isRedirect = true;
-            if (!string.IsNullOrEmpty(token) || ignore != null)
-            {
-                var loginCache = _memory.Get<string>(LoginConst.CacheKey);
-                if(!loginCache.IsNull && loginCache.Value == token)
-                {
-                    isRedirect = false;
-                    base.OnActionExecuting(context);
-                }
-            }
-
-            if (isRedirect)
-            {
-                context.HttpContext.Response.Redirect("/Login/Index");
-            }
-        }
-
-        #endregion
-
-        #region Page
+        #region 短链列表
 
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult Transfer()
-        {
-            return View();
-        }
-
-        #endregion
-
-        #region API
 
         /// <summary>
         /// 查询短链列表
@@ -73,19 +33,96 @@ namespace SuperShortLink
         [HttpPost]
         public async Task<IActionResult> List([FromBody] RecordListRequest request)
         {
-            var pageData = await _shortLinkRepository.GetListAsync(request);
+            var pageData = await _shortLinkService.GetListAsync(request);
 
-            return base.Json(new { pageData }, DateTimeConverter.Serializer);
+            return base.Json(new { pageData }, DateTimeConvertor.Serializer);
+        }
+
+        #endregion
+
+        #region 在线生成
+
+        public IActionResult Transfer()
+        {
+            return View();
         }
 
         /// <summary>
-        /// 解析生成短网址，并保存到数据库
+        /// 在线生成短链
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
         {
             var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
             return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
+        }
+
+        #endregion
+
+        #region 授权应用
+
+        public IActionResult Application()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 授权应用列表
+        /// </summary>
+
+        [HttpPost]
+        public async Task<IActionResult> ApplicationList([FromBody] ApplicationListRequest request)
+        {
+            var result = await _applicationService.QueryPageAsync(request);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// 添加授权应用
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> AddApplication([FromBody] ApplicationModel request)
+        {
+            var result = await _applicationService.AddAsync(request);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// 更新秘钥
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> UpdateApplicationSecret([FromBody] AppUpdateRequest request)
+        {
+            var result = await _applicationService.UpdateSecretAsync(request);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// 删除应用
+        /// </summary>
+        /// <param name="update"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> DeleteApplication([FromBody] AppUpdateRequest request)
+        {
+            var result = await _applicationService.DeleteAsync(request.appId);
+            return Ok(result);
+        }
+
+        #endregion
+
+        #region 短链重定向
+
+        [HttpGet("{key?}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Access(string key)
+        {
+            var url = await _shortLinkService.AccessAsync(key);
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                return Redirect(url);
+            }
+            return new NotFoundResult();
         }
 
         #endregion

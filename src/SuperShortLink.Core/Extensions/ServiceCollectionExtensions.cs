@@ -53,6 +53,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<IShortLinkService, ShortLinkService>();
             services.AddTransient<IShortLinkRepository, ShortLinkRepository>();
+
+            services.AddTransient<IApplicationService, ApplicationService>();
+            services.AddTransient<IApplicationRepository, ApplicationRepository>();
+
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
             return services;
         }
