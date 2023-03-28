@@ -34,7 +34,7 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public void Generate_Key_Be_Valid()
         {
-            var key = _converter.GenerateKeys();
+            var key = _converter.GenerateSecret();
             Assert.NotNull(key);
         }
 
