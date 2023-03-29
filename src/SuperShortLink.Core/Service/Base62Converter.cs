@@ -12,12 +12,12 @@ namespace SuperShortLink
     /// </summary>
     public class Base62Converter
     {
-        private readonly string _base62Charset;
+        private readonly string _base62CharSet;
         private readonly int _codeLength;
 
         public Base62Converter(IOptionsSnapshot<ShortLinkOptions> option)
         {
-            _base62Charset = option.Value.Secrect;
+            _base62CharSet = option.Value.Secrect;
             _codeLength = option.Value.CodeLength;
         }
 
@@ -28,7 +28,7 @@ namespace SuperShortLink
         {
             get
             {
-                var base62MaxValue = string.Empty.PadLeft(_codeLength, _base62Charset.Last());
+                var base62MaxValue = string.Empty.PadLeft(_codeLength, _base62CharSet.Last());
                 return Decode(base62MaxValue).ToString().Length;
             }
         }
@@ -51,7 +51,7 @@ namespace SuperShortLink
 
             var confuseId = long.Parse(string.Join("", idChars));
             var base62Str = Encode(confuseId);
-            return base62Str.PadLeft(_codeLength, _base62Charset.First());
+            return base62Str.PadLeft(_codeLength, _base62CharSet.First());
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SuperShortLink
             var sb = new StringBuilder();
             do
             {
-                sb.Insert(0, _base62Charset[(int)(value % 62)]);
+                sb.Insert(0, _base62CharSet[(int)(value % 62)]);
                 value /= 62;
             } while (value > 0);
 
@@ -105,7 +105,7 @@ namespace SuperShortLink
             for (int i = 0; i < value.Length; i++)
             {
                 int power = value.Length - i - 1;
-                int digit = _base62Charset.IndexOf(value[i]);
+                int digit = _base62CharSet.IndexOf(value[i]);
                 if (digit < 0)
                     throw new ArgumentException("Invalid character in base62 string", "value");
                 result += digit * (long)Math.Pow(62, power);
