@@ -90,10 +90,10 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public void Base64_Convert_Should_Be_Same()
         {
-            var convert = _converter.ToBase62String(10);
+            var convert = _converter.Encode(10);
             Assert.NotEmpty(convert);
 
-            var digit = _converter.ConvertFromBase62(convert);
+            var digit = _converter.Decode(convert);
             Assert.NotEqual(10L, digit);
         }
 

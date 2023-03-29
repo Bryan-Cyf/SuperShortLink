@@ -28,7 +28,8 @@ namespace SuperShortLink
         {
             get
             {
-                return ConvertFromBase62(string.Empty.PadLeft(_codeLength, _base62Charset.Last())).ToString().Length;
+                var base62MaxValue = string.Empty.PadLeft(_codeLength, _base62Charset.Last());
+                return Decode(base62MaxValue).ToString().Length;
             }
         }
 
@@ -38,8 +39,6 @@ namespace SuperShortLink
         /// 2、倒转32100000
         /// 3、把倒转后的十进制转六十二进制（乱序后）
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public string Confuse(long id)
         {
             if (id.ToString().Length > MaxLength)
@@ -50,10 +49,9 @@ namespace SuperShortLink
                    .ToCharArray()
                    .Reverse();
 
-            //倒转后的Id
             var confuseId = long.Parse(string.Join("", idChars));
-            var base64Str = ToBase62String(confuseId);
-            return base64Str.PadLeft(_codeLength, _base62Charset.First());
+            var base62Str = Encode(confuseId);
+            return base62Str.PadLeft(_codeLength, _base62Charset.First());
         }
 
         /// <summary>
@@ -62,14 +60,12 @@ namespace SuperShortLink
         /// 2、倒转00000123，得到123
         /// 3、根据123作为主键去数据库查询映射对象
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         public long ReCoverConfuse(string key)
         {
             if (key.Length > _codeLength + 1)
                 throw new Exception($"转换值不能超过最大位数{_codeLength + 1}");
 
-            var confuseId = ConvertFromBase62(key);
+            var confuseId = Decode(key);
 
             var idChars = confuseId.ToString()
                 .PadLeft(MaxLength, '0')
@@ -83,10 +79,12 @@ namespace SuperShortLink
         /// <summary>
         /// 十进制 -> 62进制
         /// </summary>
-        public string ToBase62String(long value)
+        public string Encode(long value)
         {
-            var sb = new StringBuilder();
+            if (value < 0)
+                throw new ArgumentOutOfRangeException("value", "value must be greater or equal to zero");
 
+            var sb = new StringBuilder();
             do
             {
                 sb.Insert(0, _base62Charset[(int)(value % 62)]);
@@ -101,13 +99,15 @@ namespace SuperShortLink
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public long ConvertFromBase62(string value)
+        public long Decode(string value)
         {
             long result = 0;
             for (int i = 0; i < value.Length; i++)
             {
                 int power = value.Length - i - 1;
                 int digit = _base62Charset.IndexOf(value[i]);
+                if (digit < 0)
+                    throw new ArgumentException("Invalid character in base62 string", "value");
                 result += digit * (long)Math.Pow(62, power);
             }
 
