@@ -55,7 +55,7 @@ namespace SuperShortLink
             var appInfo = await CheckAppCodeAsync(context, dic);
             if (appInfo == null)
             {
-                _logger.LogWarning($"{nameof(ApiAuthrizeFilter)}--验证app_code失败");
+                _logger.LogWarning($"{nameof(ApiAuthrizeFilter)}--验证app_code失败--{System.Text.Json.JsonSerializer.Serialize(dic)}");
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace SuperShortLink
             if (dic.ContainsKey(nameof(ApiBaseDto.timestamp)))
             {
                 var timestampStr = dic[nameof(ApiBaseDto.timestamp)];
-                var offsetTime = 10;
+                var offsetTime = 60; //1分钟内的请求校验
 
                 if (double.TryParse(timestampStr, out var time) &&
                     time <= DateTime.Now.ToUnixTimestamp() &&
