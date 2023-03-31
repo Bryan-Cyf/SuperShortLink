@@ -87,6 +87,11 @@ namespace SuperShortLink
 
                 await _repository.UpdateAccessDataAsync(id);
             }
+            else
+            {
+                //防止缓存击穿
+                _memory.Set(shortKey, string.Empty);
+            }
 
             return originUrl;
         }
