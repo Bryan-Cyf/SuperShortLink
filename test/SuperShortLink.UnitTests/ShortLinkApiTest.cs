@@ -30,10 +30,7 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public async Task Api_Should_Be_Valid()
         {
-            var shortLink = await _apiService.GenerateAsync(new Api.Models.ShortLinkGenerateRequest()
-            {
-                origin_url = "https://www.baidu.com"
-            });
+            var shortLink = await _apiService.GenerateAsync("https://www.baidu.com");
             Assert.NotNull(shortLink);
         }
     }
