@@ -94,7 +94,7 @@ namespace SuperShortLink.UnitTests
             Assert.NotEmpty(convert);
 
             var digit = _converter.Decode(convert);
-            Assert.NotEqual(10L, digit);
+            Assert.Equal(10L, digit);
         }
 
         [Fact]
