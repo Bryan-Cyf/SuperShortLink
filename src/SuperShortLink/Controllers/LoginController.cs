@@ -7,17 +7,14 @@ namespace SuperShortLink
 {
     public class LoginController : Controller
     {
-        private readonly IMemoryCaching _memory;
         private readonly IShortLinkService _shortLinkService;
         private readonly LoginModel _loginInfo;
 
         public LoginController(IShortLinkService shortLinkService,
-            IOptionsSnapshot<ShortLinkOptions> option,
-            IMemoryCaching memory)
+            IOptionsSnapshot<ShortLinkOptions> option)
         {
             _shortLinkService = shortLinkService;
             _loginInfo = new LoginModel(option.Value.LoginAcount, option.Value.LoginPassword);
-            _memory = memory;
         }
 
         public IActionResult Index()
@@ -30,10 +27,8 @@ namespace SuperShortLink
         {
             if (_loginInfo.UserName == name.Trim() && _loginInfo.Password == password.Trim())
             {
-                var guid = Guid.NewGuid().ToString();
-                _memory.Set(LoginConst.CacheKey, guid);
-                HttpContext.Response.Cookies.Append("token", guid,
-                    new CookieOptions() { HttpOnly = true, Expires = DateTimeOffset.Now.AddDays(1) });
+                HttpContext.Response.Cookies.Append("token", LoginConst.GetToken(_loginInfo.UserName, _loginInfo.Password),
+                    new CookieOptions() { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(2) });
                 return Redirect("/Home/Index");
             }
 
