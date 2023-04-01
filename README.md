@@ -259,6 +259,8 @@ public class ShortLinkController : Controller
 - 标准Base64编码表如下：
 
 ![](media/content-base64.png?raw=true)
+
+
 其中“+”和“/”在 URL 中会被编码为“%2B”以及“%2F”，需要进行再编码，因此直接使用标准 Base64 编码进行短URL 编码并不合适，所以，我们需要针对 URL 场景对 Base64 编码进行改造，Base64 编码表中的 62，63 进行编码移除，更新为Base62编码
 
 ### 混淆加密算法设计
@@ -270,8 +272,7 @@ public class ShortLinkController : Controller
 > 举例：打乱成：s9LFkgy5RovixI1aOf8UhdY3r4DMplQZJXPqebE0WSjBn7wVzmN2Gc6THCAKhaut
 
 2. 6位长度标准编码与打乱后编码的对应关系
-   | 计数器自增Id | 标准Base62编码 | 标准Base62编码（6位字符） | 打乱后Base62编码 | 打乱后Base62编码
-   （6位字符） |
+   | 计数器自增Id | 标准Base62编码 | 标准Base62编码（6位字符） | 打乱后Base62编码 | 打乱后Base62编码（6位字符） |
    | --- | --- | --- | --- | --- |
    | 6 | G | AAAAAG | y | sssssy |
    | 66 | BE | AAAABE | 9k | ssss9k |
@@ -280,9 +281,8 @@ public class ShortLinkController : Controller
 > 可以看出，虽然打乱了，但还顺序性还是很明显
 
 3. 将前面补0再倒转，由于6位长度最大11位，为了避免倒转后超过该数值，因此补到10位
-   | 计数器自增Id | 打乱后Base62编码
-   （6位字符） | 前面补0到10位 | 倒转数字 | 倒转后的打乱Base62编码
-   （6位字符） |
+
+   | 计数器自增Id | 打乱后Base62编码（6位字符） | 前面补0到10位 | 倒转数字 | 倒转后的打乱Base62编码（6位字符） |
    | --- | --- | --- | --- | --- |
    | 6 | sssssy | 0000000006 | 6000000000 | yPFrgP |
    | 66 | ssss9k | 0000000066 | 6600000000 | 5xWCQH |
