@@ -18,13 +18,13 @@ namespace SuperShortLink.Api
             _option = option.Value;
         }
 
-        public async Task<string> GenerateAsync(ShortLinkGenerateRequest request)
+        public async Task<string> GenerateAsync(string origin_url)
         {
             try
             {
                 var dto = new ShortLinkGenerateDto()
                 {
-                    generate_url = request.origin_url
+                    generate_url = origin_url
                 };
 
                 var response = await _httpRequest.PostAsync<ResponseModel<string>>(dto, ShortLinkApiConsts.ApiUrl.Generate);

@@ -14,6 +14,6 @@ namespace SuperShortLink.Api
         /// 生成短链
         /// </summary>
 
-        Task<string> GenerateAsync(ShortLinkGenerateRequest request);
+        Task<string> GenerateAsync(string origin_url);
     }
 }
