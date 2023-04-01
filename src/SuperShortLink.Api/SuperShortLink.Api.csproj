@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\build\pack.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace>SuperShortLink.Api</RootNamespace>
+		<Description>[短链Api]包含短链在线生成等功能</Description>
+		<PackageProjectUrl>https://github.com/Bryan-Cyf/SuperShortLink</PackageProjectUrl>
+		<PackageTags>core,short,link,api</PackageTags>
+		<PackageIcon>nuget-icon.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="../../media/nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>

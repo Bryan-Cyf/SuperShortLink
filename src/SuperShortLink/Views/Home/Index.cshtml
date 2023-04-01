@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column prop="short_url"
                              align="center"
-                             width="300"
+                             width="400"
                              label="短链接">
                 <template slot-scope="scope">
                     <el-link size="mini" :href="`${window.location.origin}/${scope.row.short_url}`" type="primary" target="_blank">{{window.location.origin}}/{{scope.row.short_url}}</el-link>

@@ -5,7 +5,6 @@ using SuperShortLink.Models;
 
 namespace SuperShortLink
 {
-    [Route("[controller]/[Action]")]
     public class LoginController : Controller
     {
         private readonly IMemoryCaching _memory;

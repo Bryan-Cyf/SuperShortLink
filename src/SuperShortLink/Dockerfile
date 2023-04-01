@@ -16,17 +16,17 @@ RUN set -eux; \
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Pandora.ShortLink/Pandora.ShortLink.csproj", "src/Pandora.ShortLink/"]
-COPY ["src/Pandora.ShortLink.Core/Pandora.ShortLink.Core.csproj", "src/Pandora.ShortLink.Core/"]
-RUN dotnet restore "src/Pandora.ShortLink/Pandora.ShortLink.csproj"
+COPY ["src/SuperShortLink/SuperShortLink.csproj", "src/SuperShortLink/"]
+COPY ["src/SuperShortLink.Core/SuperShortLink.Core.csproj", "src/SuperShortLink.Core/"]
+RUN dotnet restore "src/SuperShortLink/SuperShortLink.csproj"
 COPY . .
-WORKDIR "/src/src/Pandora.ShortLink"
-RUN dotnet build "Pandora.ShortLink.csproj" -c Release -o /app/build
+WORKDIR "/src/src/SuperShortLink"
+RUN dotnet build "SuperShortLink.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Pandora.ShortLink.csproj" -c Release -o /app/publish
+RUN dotnet publish "SuperShortLink.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Pandora.ShortLink.dll"]
+ENTRYPOINT ["dotnet", "SuperShortLink.dll"]
