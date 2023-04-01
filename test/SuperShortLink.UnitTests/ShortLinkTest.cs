@@ -90,15 +90,16 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public void Base64_Convert_Should_Be_Same()
         {
-            var convert = _converter.Encode(10);
+            var initDigit = 63;
+            var convert = _converter.Encode(initDigit);
             Assert.NotEmpty(convert);
 
             var digit = _converter.Decode(convert);
-            Assert.Equal(10L, digit);
+            Assert.Equal(initDigit, digit);
         }
 
         [Fact]
-        public void Convert_Should_Be_Same()
+        public void Confuse_Should_Be_Same()
         {
             var initDigit = int.MaxValue;
             var convert = _converter.Confuse(initDigit);
