@@ -22,14 +22,25 @@ namespace SuperShortLink
         }
 
         /// <summary>
-        /// 注意：超过设定的长度可能会有异常数据
+        /// 补充0的长度
         /// </summary>
-        private int MaxLength
+        private int ZeroLength
         {
             get
             {
-                var base62MaxValue = string.Empty.PadLeft(_codeLength, _base62CharSet.Last());
-                return Decode(base62MaxValue).ToString().Length;
+                return MaxValue.ToString().Length;
+            }
+        }
+
+        /// <summary>
+        /// Code长度位数下能达到的最大值
+        /// </summary>
+        private long MaxValue
+        {
+            get
+            {
+                var max = (long)Math.Pow(62, _codeLength) - 1;
+                return (long)Math.Pow(10, max.ToString().Length - 1) - 1;
             }
         }
 
@@ -41,11 +52,13 @@ namespace SuperShortLink
         /// </summary>
         public string Confuse(long id)
         {
-            if (id.ToString().Length > MaxLength)
-                throw new Exception($"转换值不能超过最大位数{MaxLength}");
+            if (id > MaxValue)
+            {
+                throw new Exception($"转换值不能超过最大值{MaxValue}");
+            }
 
             var idChars = id.ToString()
-                   .PadLeft(MaxLength, '0')
+                   .PadLeft(ZeroLength, '0')
                    .ToCharArray()
                    .Reverse();
 
@@ -62,17 +75,20 @@ namespace SuperShortLink
         /// </summary>
         public long ReCoverConfuse(string key)
         {
-            if (key.Length > _codeLength + 1)
-                throw new Exception($"转换值不能超过最大位数{_codeLength + 1}");
+            if (key.Length != _codeLength)
+            {
+                return 0;
+                //throw new Exception($"转换值长度不等于系统设置的长度");
+            }
 
             var confuseId = Decode(key);
-
             var idChars = confuseId.ToString()
-                .PadLeft(MaxLength, '0')
+                .PadLeft(ZeroLength, '0')
                 .ToCharArray()
                 .Reverse();
 
             var id = long.Parse(string.Join("", idChars));
+            id = id > MaxValue ? 0 : id;
             return id;
         }
 

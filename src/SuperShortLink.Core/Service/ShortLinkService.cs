@@ -73,6 +73,11 @@ namespace SuperShortLink
         {
             var id = _converter.ReCoverConfuse(shortKey);
 
+            if (id == 0)
+            {
+                return string.Empty;
+            }
+
             var cacheUrl = _memory.Get<string>(shortKey);
             var originUrl = !cacheUrl.IsNull ?
                             cacheUrl.Value :

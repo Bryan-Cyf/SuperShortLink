@@ -100,12 +100,12 @@ namespace SuperShortLink.UnitTests
         [Fact]
         public void Convert_Should_Be_Same()
         {
-            var initDigit = 1000000L;
+            var initDigit = int.MaxValue;
             var convert = _converter.Confuse(initDigit);
-            Assert.NotEmpty(convert);
 
             var digit = _converter.ReCoverConfuse(convert);
             Assert.Equal(initDigit, digit);
+
         }
     }
 }
