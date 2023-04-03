@@ -6,7 +6,6 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace>SuperShortLink.Api</RootNamespace>
 		<Description>[短链Api]包含短链在线生成等功能</Description>
-		<PackageProjectUrl>https://github.com/Bryan-Cyf/SuperShortLink</PackageProjectUrl>
 		<PackageTags>core,short,link,api</PackageTags>
 		<PackageIcon>nuget-icon.png</PackageIcon>
 	</PropertyGroup>
