@@ -8,6 +8,7 @@
 		<Authors>Bryan</Authors>
 		<Company>Bryan</Company>
 		<Product>SuperShortLink</Product>
+		<PackageProjectUrl>https://github.com/Bryan-Cyf/SuperShortLink</PackageProjectUrl>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 </Project>

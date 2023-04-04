@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SuperShortLink.Helpers;
 
 namespace SuperShortLink.Models
 {
@@ -21,5 +17,6 @@ namespace SuperShortLink.Models
     public class LoginConst
     {
         public static string CacheKey = "LoginCache";
+        public static string GetToken(string name, string pwd) => $"{name}&&{pwd}".ToMd5();
     }
 }
