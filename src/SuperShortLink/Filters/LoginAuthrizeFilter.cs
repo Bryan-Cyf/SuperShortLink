@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 using SuperShortLink.Cache;
 using SuperShortLink.Models;
 
@@ -17,11 +18,11 @@ namespace SuperShortLink
 
     public class LoginAuthrizeFilter : IAuthorizationFilter
     {
-        private readonly IMemoryCaching _memory;
+        private readonly LoginModel _loginInfo;
 
-        public LoginAuthrizeFilter(IMemoryCaching memory)
+        public LoginAuthrizeFilter(IOptionsSnapshot<ShortLinkOptions> option)
         {
-            _memory = memory;
+            _loginInfo = new LoginModel(option.Value.LoginAcount, option.Value.LoginPassword);
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -34,8 +35,8 @@ namespace SuperShortLink
             var token = context.HttpContext.Request.Cookies["token"];
             if (!string.IsNullOrEmpty(token))
             {
-                var loginCache = _memory.Get<string>(LoginConst.CacheKey);
-                if (!loginCache.IsNull && loginCache.Value == token)
+                var md5Token = LoginConst.GetToken(_loginInfo.UserName, _loginInfo.Password);
+                if (md5Token == token)
                 {
                     return;
                 }
