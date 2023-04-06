@@ -303,7 +303,7 @@ public class ShortLinkController : Controller
 ---------
 ## 更多示例
 
-1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src/SuperShortLink)
-2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test/SuperShortLink.UnitTests)
+1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src)
+2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test)
 3. 查看 [高并发解决方案](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test/SuperShortLink.UnitTests)
 
