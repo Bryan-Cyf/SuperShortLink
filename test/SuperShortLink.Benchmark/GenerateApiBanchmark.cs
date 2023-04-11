@@ -48,10 +48,7 @@ namespace SuperShortLink.Benchmark
                 tasks.Add(Task.Factory.StartNew(() =>
                 {
                     Interlocked.Increment(ref index);
-                    _ = _apiService.GenerateAsync(new Api.Models.ShortLinkGenerateRequest()
-                    {
-                        origin_url = $"{url}{index}",
-                    }).Result;
+                    _ = _apiService.GenerateAsync($"{url}{index}").Result;
                 }));
             }
             await Task.WhenAll(tasks);
