@@ -18,165 +18,47 @@
 -------
 
 ## 功能介绍
- - 基于.NET 6开发的后端及Web管理界面
- - 支持自定义短链长度
- - 支持在线短链生成及跳转长链
- - 支持实时统计短链访问次数
- - 支持多种持久化方式：MySQL/PostgreSQL/SqlServer(2012及以上)
- - 傻瓜式配置，开箱即用
+- [x] 基于.NET 6开发的后端及Web管理界面
+- [x] 支持自定义短链长度
+- [x] 支持在线短链生成及跳转长链
+- [x] 支持实时统计短链访问次数
+- [x] 支持多种持久化方式：MySQL/PostgreSQL/SqlServer(2012及以上)
+- [x] 傻瓜式配置，开箱即用
 
 ------
-## 构建项目
+## 文档
 
-### Step 1 : 打开项目
-通过VisualStudio打开 SuperShortLink.sln
+### [项目架构设计文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
 
-### Step 2 : 配置数据库
-- 可选：`MySQL`/`PostgreSQL`/`SqlServer`(2012及以上)
-- 在`appsetting.json`文件中更新连接字符串
-```
-"ShortLink": {
-    "Secrect": "vZCN8VhSge13UQrYjBTwKulWqsIOAocL0DkmRdxPMJf5tiHbn72z69aXpGyFE4",// 随机打乱的Base62编码
-    "CodeLength": 6, //短链长度
-    "DbType": "PostgreSQL", //DatabaseType:MySQL/PostgreSQL/SqlServer(仅支持SQL Server2012及以上)
-    "ConnectionString": "Server=127.0.0.1;Port=5432;User Id=uid;Password=pwd;Database=test_db;",//数据库链接字符串
-    "LoginAcount": "admin",   //登陆账号
-    "LoginPassword": "123456" //登陆密码
-}
-```
-### Step 3 : [执行数据库建表SQL](https://github.com/Bryan-Cyf/SuperShortLink/blob/master/build/sql_create_table.sql)
+### [项目运行及接入文档](https://chenyuefeng.blog.csdn.net/article/details/130222045)
 
-### Step 4 : 运行项目
-- 登陆管理后台：{域名}/home/index
-- 默认登陆账号密码：admin 123456
-- 如需修改账号密码，更新`appsetting.json`的LoginAcount及LoginPassword即可
 
-------------
+----------
 
 ## Web界面
+- 登录页
+
 ![](media/web-login.png?raw=true)
+- 短链列表页
+
 ![](media/web-list.png?raw=true)
+- 短链生成页
+
 ![](media/web-generate.png?raw=true)
+- 应用列表页
+
 ![](media/web-application-create.png?raw=true)
 ![](media/web-application-list.png?raw=true)
 ![](media/web-application-dashboard.png?raw=true)
 
+-----------
 
-# 项目接入
+## 更多示例
 
-## 1. 通过API扩展类库接入（推荐）
+1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src)
+2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test)
 
-> API类库是基于HTTP请求，适合将接口开放给其他平台/系统调用，对应用屏蔽了Token，时间戳，应用Code等所需携带的请求细节
-
-### 1. Step 1 : 安装包，通过Nuget安装包
-
-```powershell
-Install-Package Pandora.ShortLink.Api
-```
-
-### 2. Step 2 : 配置 Startup 启动类
-
-```csharp
-public class Startup
-{
-    //...
-    
-    public void ConfigureServices(IServiceCollection services)
-    {
-        //configuration
-        services.AddShortLinkApi(option =>
-        {
-            option.ApiDomain = "短链服务域名";
-            option.AppSecret = "应用秘钥";
-            option.AppCode = "应用Code";
-        });
-    }    
-}
-```
-
-### 3. Step 3 : IShortLinkApiService服务接口使用
-
-```csharp
-[Route("api/[controller]/[Action]")]
-public class ShortLinkController : Controller
-{
-    private readonly IShortLinkApiService _apiService;
-    public ShortLinkController(IShortLinkApiService apiService)
-    {
-        _apiService = apiService;
-    }
-
-    /// <summary>
-    /// 解析生成短网址
-    /// </summary>
-    /// <param name="url">长链接</param>
-    /// <returns></returns>
-    [HttpPost]
-    public async Task<string> Generate(string url)
-    {
-        var short_url = await _apiService.GenerateAsync(url);
-        return short_url;
-    }
-}
-```
-
-## 2. 通过Core扩展类库接入
-
-> Core类库是直连数据库的，适合由内部平台/系统调用，不需经过授权验证
-
-### 1. Step 1 : 安装包，通过Nuget安装包
-
-```
-Install-Package Pandora.ShortLink.Core
-```
-
-### 2. Step 2 : 配置 Startup 启动类
-
-```csharp
-public class Startup
-{
-    //...
-    
-    public void ConfigureServices(IServiceCollection services)
-    {
-        //configuration
-        services.AddShortLink(option =>
-        {
-            option.ConnectionString = "数据库链接";
-            option.DbType = "数据库类型";//可选：DatabaseType.PostgreSQL/MySQL/SqlServer
-            option.Secrect = "打乱后的Base62编码",
-            option.CodeLength = "短链长度";
-        });
-    }    
-}
-```
-
-### 3. Step 3 : IShortLinkService服务接口使用
-
-```csharp
-[Route("api/[controller]/[Action]")]
-public class ShortLinkController : Controller
-{
-    private readonly IShortLinkService _shortLinkService;
-    public ShortLinkController(IShortLinkService shortLinkService)
-    {
-        _shortLinkService = shortLinkService;
-    }
-
-    /// <summary>
-    /// 解析生成短网址
-    /// </summary>
-    /// <param name="url">长链接</param>
-    /// <returns></returns>
-    [HttpPost]
-    public async Task<string> Generate(string url)
-    {
-        var short_url = await _shortLinkService.GenerateAsync(url);
-        return short_url;
-    }
-}
-```
-
+----------
 ## 短URL生成原理：混淆自增算法详解
 
 - 标准Base64编码表如下：
@@ -224,9 +106,3 @@ public class ShortLinkController : Controller
 
 
 ---------
-## 更多示例
-
-1. 查看 [使用例子](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/src)
-2. 查看 [测试用例](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test)
-3. 查看 [高并发解决方案](https://github.com/Bryan-Cyf/SuperShortLink/tree/master/test/SuperShortLink.UnitTests)
-
