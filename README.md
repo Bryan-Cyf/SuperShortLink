@@ -28,7 +28,7 @@
 ------
 ## 文档
 
-### [项目架构设计文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
+### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
 
 ### [项目运行及接入文档](https://chenyuefeng.blog.csdn.net/article/details/130222045)
 
