@@ -27,11 +27,15 @@
 
 ------
 ## 文档
+---------
 
-### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
-
+- 项目的运行及接入，看这个文档
 ### [项目运行及接入文档](https://chenyuefeng.blog.csdn.net/article/details/130222045)
 
+---------
+
+- 项目的整体架构设计，加解密混淆算法原理，看这个文档
+### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
 
 ----------
 
