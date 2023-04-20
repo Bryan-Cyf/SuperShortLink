@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build\pack.props = build\pack.props
 		README.md = README.md
 		build\sql_create_table.sql = build\sql_create_table.sql
-		TextFile1.txt = TextFile1.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0628C9E9-5DF9-4A35-9A3A-177C30733F68}"
@@ -25,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperShortLink.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperShortLink.Api", "src\SuperShortLink.Api\SuperShortLink.Api.csproj", "{D1C0D0DF-C8D7-4C05-B459-FDD68B817E29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperShortLink.Benchmark", "test\SuperShortLink.Benchmark\SuperShortLink.Benchmark.csproj", "{93FCD6C3-55EB-443B-AC3B-8E0C87722739}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperShortLink.Benchmark", "test\SuperShortLink.Benchmark\SuperShortLink.Benchmark.csproj", "{93FCD6C3-55EB-443B-AC3B-8E0C87722739}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
