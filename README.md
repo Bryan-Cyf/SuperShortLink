@@ -3,8 +3,8 @@
 
 | Package Name |  Version | Downloads
 |--------------|  ------- | ----
-| SuperShortLink.Core | ![](https://img.shields.io/badge/nuget-v1.2.1-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
-| SuperShortLink.Api | ![](https://img.shields.io/badge/nuget-v1.2.1-blue) | ![](https://img.shields.io/badge/downloads-xM-brightgreen)|
+| SuperShortLink.Core | [![NuGet](https://img.shields.io/nuget/v/SuperShortLink.Core)](https://www.nuget.org/packages/SuperShortLink.Core) | [![NuGet](https://img.shields.io/nuget/dt/SuperShortLink.Core)](https://www.nuget.org/packages/SuperShortLink.Core)|
+| SuperShortLink.Api | [![NuGet](https://img.shields.io/nuget/v/SuperShortLink.Api)](https://www.nuget.org/packages/SuperShortLink.Api) | [![NuGet](https://img.shields.io/nuget/dt/SuperShortLink.Api)](https://www.nuget.org/packages/SuperShortLink.Api)|
 
 ---------
 
