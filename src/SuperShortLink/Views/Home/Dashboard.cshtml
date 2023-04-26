@@ -14,46 +14,190 @@
             </div>
         </div>
     </el-card>
+    <el-card>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#hourChartPanel" @@click="getChart(1)" role="tab" aria-controls="overview" aria-selected="true">小时</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#dayChartPanel" @@click="getChart(2)" role="tab" aria-controls="environment" aria-selected="false">天</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#weekChartPanel" @@click="getChart(3)" role="tab" aria-controls="environment" aria-selected="false">周</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#monthChartPanel" @@click="getChart(4)" role="tab" aria-controls="environment" aria-selected="false">月</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="hourChartPanel" role="tabpanel">
+                        <div class="table-responsive">
+                            <canvas id="hourChart" width="100%" height="20"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="dayChartPanel" role="tabpanel">
+                        <div class="table-responsive">
+                            <canvas id="dayChart" width="100%" height="20"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="weekChartPanel" role="tabpanel">
+                        <div class="table-responsive">
+                            <canvas id="weekChart" width="100%" height="20"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="monthChartPanel" role="tabpanel">
+                        <div class="table-responsive">
+                            <canvas id="monthChart" width="100%" height="20"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </el-card>
 </div>
 @section Scripts
     {
-    <script>
-        let app = new Vue({
-            el: "#main",
-            data() {
-                return {
-                    loading: false,
-                    query: {
-                        generate_url: ''
+<script>
+    let app = new Vue({
+        el: "#main",
+        data() {
+            return {
+                loading: false,
+                query: {
+                    generate_url: ''
+                },
+                shortUrl: '',
+                originUrl: '',
+                charts : [
+                    { chart: $('#hourChart'), id: '#hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
+                    {
+                        chart: $('#dayChart'),
+                        id: '#dayChart',
+                        labels: [
+                            "1h", "2h", "3h", "4h", '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h',
+                            '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h', '24h'
+                        ]
                     },
-                    shortUrl: '',
-                    originUrl: ''
-                }
-            },
-            mounted() {
-
-            },
-            created() {
-                console.log("init!");
-            },
-            methods: {
-                fetchData() {
-                    sessionStorage.setItem("_query", JSON.stringify(this.query));
-                    this.loading = true;
-                    axios.post("/home/Generate", this.query).then(res => {
-                        this.shortUrl = window.location.origin + "/" + res.data.short_url;
-                        this.originUrl = res.data.origin_url;
-                        console.log(res);
-                        this.loading = false;
-                    }).catch(err => {
-                        this.loading = false;
-                        this.$notify({
-                            message: "请求失败，请检查输入",
-                            type: 'warning'
-                        });
-                    });
-                }
+                    {
+                        chart: $('#weekChart'),
+                        id: '#weekChart',
+                        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", 'Friday', 'Saturday', 'Sunday']
+                    },
+                    { chart: $('#monthChart'), id: '#monthChart', labels: this.monthChartLabels() }
+                ],
             }
-        })
-    </script>
+        },
+        mounted() {
+
+        },
+        created() {
+            this.charts[0].all = [0,0,0,0,0,0];
+            this.charts[0].error = [0,0,0,0,0,0];
+            this.initLineChart(this.charts[0]);
+
+            console.log("init!");
+        },
+        methods: {
+            fetchData() {
+                sessionStorage.setItem("_query", JSON.stringify(this.query));
+                this.loading = true;
+                axios.post("/Home/Generate", this.query).then(res => {
+                    this.shortUrl = window.location.origin + "/" + res.data.short_url;
+                    this.originUrl = res.data.origin_url;
+                    console.log(res);
+                    this.loading = false;
+                }).catch(err => {
+                    this.loading = false;
+                    this.$notify({
+                        message: "请求失败，请检查输入",
+                        type: 'warning'
+                    });
+                });
+            },
+            getChart(i) {
+                    //this.charts[i - 1].generate = new [1,2,3,4,5,6,7,8,9];
+                    this.charts[i - 1].all = [0,0,154,0,0,0];
+                    this.charts[i - 1].error = [0,0,154,0,0,0];
+                    this.initLineChart(this.charts[i - 1]);
+                //axios.post("/Home/GetChart", JSON.stringify({ ChartDataType: i })).then(res => {
+                //    this.shortUrl = window.location.origin + "/" + res.data.short_url;
+                //    this.originUrl = res.data.origin_url;
+                //    console.log(res);
+                //    this.loading = false;
+                //}).catch(err => {
+                //    this.loading = false;
+                //    this.$notify({
+                //        message: "请求失败，请检查输入",
+                //        type: 'warning'
+                //    });
+                //});
+                //$.ajax({
+                //    method: "post",
+                //    url: mapPath + "/Dashboard/GetLogChart",
+                //    data: JSON.stringify({ ChartDataType: i })
+                //}).done(function (data) {
+                //    charts[i - 1].generate = new [1,2,3,4,5,6,7,8,9];
+                //    charts[i - 1].access = new [1,2,3,4,5,6,7,8,9];
+                //    //charts[i - 1].debug = data.Debug;
+                //    //charts[i - 1].info = data.Info;
+                //    //charts[i - 1].warn = data.Warn;
+                //    //charts[i - 1].fatal = data.Fatal;
+                //    //charts[i - 1].trace = data.Trace;
+                //    initLineChart(charts[i - 1]);
+                //});
+            },
+            initLineChart(opt) {
+                new Chart(opt.chart,
+                    {
+                        type: 'line',
+                        data: {
+                            labels: opt.labels,
+                            datasets: [
+                                {
+                                    label: 'all',
+                                    data: opt.all,
+                                    backgroundColor: 'rgba(66, 165, 245, 0.5)',
+                                    borderColor: '#2196F3',
+                                    borderWidth: 1
+                                }, {
+                                    label: 'error',
+                                    data: opt.error,
+                                    backgroundColor: 'rgba(251, 105, 104, 0.5)',
+                                    borderColor: '#f75656',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'value'
+                                    },
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+
+               
+                        }
+                    });
+            },
+                    monthChartLabels() {
+                        var now = new Date();
+                        month = parseInt(now.getMonth(), 10) + 1;
+                        var days = new Date(now.getYear(), month, 0).getDate();
+                        var res = [];
+                        for (var i = 1; i <= days; i++) {
+                            res.push(i + "d");
+                        }
+                        return res;
+                    }
+                }
+            })
+</script>
 }

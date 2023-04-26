@@ -20,6 +20,25 @@ namespace SuperShortLink
             _applicationService = applicationService;
         }
 
+        #region 面板
+
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 在线生成短链
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
+        {
+            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
+            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
+        }
+
+        #endregion
+
         #region 短链列表
 
         public IActionResult Index()
@@ -36,25 +55,6 @@ namespace SuperShortLink
             var pageData = await _shortLinkService.GetListAsync(request);
 
             return base.Json(new { pageData }, DateTimeConvertor.Serializer);
-        }
-
-        #endregion
-
-        #region 在线生成
-
-        public IActionResult Transfer()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// 在线生成短链
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
-        {
-            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
-            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
         }
 
         #endregion
