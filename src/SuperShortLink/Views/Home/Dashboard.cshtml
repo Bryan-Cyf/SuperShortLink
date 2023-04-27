@@ -6,7 +6,7 @@
     <el-card :body-style="{display:'flex',padding: '20px',justifyContent:'center' }">
         <div>
             <el-input placeholder="请输入内容" v-model="query.generate_url" style="width:500px">
-                <el-button slot="append" icon="el-icon-search" @@click="fetchData" :loading="loading">生成短链</el-button>
+                <el-button slot="append" icon="el-icon-search" @@click="generateUrl" :loading="loading">生成短链</el-button>
             </el-input>
             <div style="margin-top:10px">
                 <p>短网址：<el-link type="primary" :href="shortUrl" target="_blank">{{shortUrl}}</el-link></p>
@@ -35,7 +35,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="hourChartPanel" role="tabpanel">
                         <div class="table-responsive">
-                            <canvas id="hourChart" width="100%" height="20"></canvas>
+                            <div id="hourChart" style="width:100%;height:450px;"></div>
                         </div>
                     </div>
                     <div class="tab-pane" id="dayChartPanel" role="tabpanel">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="tab-pane" id="monthChartPanel" role="tabpanel">
                         <div class="table-responsive">
-                            <canvas id="monthChart" width="100%" height="20"></canvas>
+                            <div id="monthChart" style="width:100%;height:300px;background: #ccc"></div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 shortUrl: '',
                 originUrl: '',
                 charts : [
-                    { chart: $('#hourChart'), id: '#hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
+                    { chart: $('#hourChart'), id: 'hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
                     {
                         chart: $('#dayChart'),
                         id: '#dayChart',
@@ -82,25 +82,21 @@
                     },
                     {
                         chart: $('#weekChart'),
-                        id: '#weekChart',
+                        id: 'weekChart',
                         labels: ["Monday", "Tuesday", "Wednesday", "Thursday", 'Friday', 'Saturday', 'Sunday']
                     },
-                    { chart: $('#monthChart'), id: '#monthChart', labels: this.monthChartLabels() }
+                    { chart: $('#monthChart'), id: 'monthChart', labels: this.monthChartLabels() }
                 ],
             }
         },
-        mounted() {
-
-        },
         created() {
-            this.charts[0].all = [0,0,0,0,0,0];
-            this.charts[0].error = [0,0,0,0,0,0];
-            this.initLineChart(this.charts[0]);
-
-            console.log("init!");
+            console.log("init!")
+        },
+        mounted() {
+            this.getChart(1)
         },
         methods: {
-            fetchData() {
+            generateUrl() {
                 sessionStorage.setItem("_query", JSON.stringify(this.query));
                 this.loading = true;
                 axios.post("/Home/Generate", this.query).then(res => {
@@ -117,87 +113,80 @@
                 });
             },
             getChart(i) {
-                    //this.charts[i - 1].generate = new [1,2,3,4,5,6,7,8,9];
-                    this.charts[i - 1].all = [0,0,154,0,0,0];
-                    this.charts[i - 1].error = [0,0,154,0,0,0];
-                    this.initLineChart(this.charts[i - 1]);
-                //axios.post("/Home/GetChart", JSON.stringify({ ChartDataType: i })).then(res => {
-                //    this.shortUrl = window.location.origin + "/" + res.data.short_url;
-                //    this.originUrl = res.data.origin_url;
-                //    console.log(res);
-                //    this.loading = false;
-                //}).catch(err => {
-                //    this.loading = false;
-                //    this.$notify({
-                //        message: "请求失败，请检查输入",
-                //        type: 'warning'
-                //    });
-                //});
-                //$.ajax({
-                //    method: "post",
-                //    url: mapPath + "/Dashboard/GetLogChart",
-                //    data: JSON.stringify({ ChartDataType: i })
-                //}).done(function (data) {
-                //    charts[i - 1].generate = new [1,2,3,4,5,6,7,8,9];
-                //    charts[i - 1].access = new [1,2,3,4,5,6,7,8,9];
-                //    //charts[i - 1].debug = data.Debug;
-                //    //charts[i - 1].info = data.Info;
-                //    //charts[i - 1].warn = data.Warn;
-                //    //charts[i - 1].fatal = data.Fatal;
-                //    //charts[i - 1].trace = data.Trace;
-                //    initLineChart(charts[i - 1]);
-                //});
+                this.charts[i - 1].all = [0, 182, 191, 0, 0, 0];
+                this.charts[i - 1].error = [0, 182, 191, 234, 290, 10];
+                this.initChart(this.charts[i - 1]);
             },
-            initLineChart(opt) {
-                new Chart(opt.chart,
-                    {
-                        type: 'line',
-                        data: {
-                            labels: opt.labels,
-                            datasets: [
-                                {
-                                    label: 'all',
-                                    data: opt.all,
-                                    backgroundColor: 'rgba(66, 165, 245, 0.5)',
-                                    borderColor: '#2196F3',
-                                    borderWidth: 1
-                                }, {
-                                    label: 'error',
-                                    data: opt.error,
-                                    backgroundColor: 'rgba(251, 105, 104, 0.5)',
-                                    borderColor: '#f75656',
-                                    borderWidth: 1
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'value'
-                                    },
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
+            initChart(opt) {
+                let myChart = echarts.init(document.getElementById(opt.id))
+                let option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
                             }
-
-               
                         }
-                    });
-            },
-                    monthChartLabels() {
-                        var now = new Date();
-                        month = parseInt(now.getMonth(), 10) + 1;
-                        var days = new Date(now.getYear(), month, 0).getDate();
-                        var res = [];
-                        for (var i = 1; i <= days; i++) {
-                            res.push(i + "d");
+                    },
+                    legend: {
+                        icon: "rect",
+                        itemGap: 20,
+                        data: ['all', 'error']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: opt.labels
                         }
-                        return res;
-                    }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'all',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: opt.all
+                        },
+                        {
+                            name: 'error',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: opt.error
+                        }
+                    ]
                 }
-            })
+                myChart.setOption(option)
+            },
+            monthChartLabels() {
+                var now = new Date();
+                month = parseInt(now.getMonth(), 10) + 1;
+                var days = new Date(now.getYear(), month, 0).getDate();
+                var res = [];
+                for (var i = 1; i <= days; i++) {
+                    res.push(i + "d");
+                }
+                return res;}
+        }
+    })
 </script>
 }
