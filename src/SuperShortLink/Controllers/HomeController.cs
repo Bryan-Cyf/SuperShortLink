@@ -37,6 +37,15 @@ namespace SuperShortLink
             return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
         }
 
+        /// <summary>
+        /// 在线生成短链
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> GetChart([FromBody] GetChartRequest request)
+        {
+            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
+            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
+        }
         #endregion
 
         #region 短链列表
