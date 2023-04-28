@@ -51,6 +51,7 @@ namespace SuperShortLink
             var result = await _chartFactory.GetChart(request.ChartDataType).GetCharts();
             return base.Json(new { access = result.Access, generate = result.Generate, labels = result.Labels });
         }
+
         #endregion
 
         #region 短链列表
