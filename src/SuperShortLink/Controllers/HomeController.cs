@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SuperShortLink.Cache;
+using SuperShortLink.Charts;
 using SuperShortLink.Helpers;
 using SuperShortLink.Models;
 using SuperShortLink.Repository;
@@ -13,11 +14,15 @@ namespace SuperShortLink
     {
         private readonly IShortLinkService _shortLinkService;
         private readonly IApplicationService _applicationService;
+        private readonly ChartFactory _chartFactory;
+
         public HomeController(IShortLinkService shortLinkService
-            , IApplicationService applicationService)
+            , IApplicationService applicationService
+            , ChartFactory chartFactory)
         {
             _shortLinkService = shortLinkService;
             _applicationService = applicationService;
+            _chartFactory = chartFactory;
         }
 
         #region 面板
@@ -43,8 +48,8 @@ namespace SuperShortLink
         [HttpPost]
         public async Task<IActionResult> GetChart([FromBody] GetChartRequest request)
         {
-            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
-            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
+            var result = await _chartFactory.GetChart(request.ChartDataType).GetCharts();
+            return base.Json(new { access = result.Access, generate = result.Generate });
         }
         #endregion
 

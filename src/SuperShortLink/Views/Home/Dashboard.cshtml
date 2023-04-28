@@ -68,6 +68,9 @@
                 query: {
                     generate_url: ''
                 },
+                chartQuery: {
+                    ChartDataType: 0
+                },
                 shortUrl: '',
                 originUrl: '',
                 charts : [
@@ -113,10 +116,13 @@
                 });
             },
             getChart(i) {
+                this.chartQuery.ChartDataType = i-1;
                 this.loading = true;
-                axios.post("/Home/GetChart", JSON.stringify({ ChartDataType: i })).then(res => {
-                    this.charts[i - 1].all = [0, 182, 191, 0, 0, 0];
-                    this.charts[i - 1].error = [0, 182, 191, 234, 290, 10];
+                axios.post("/Home/GetChart", this.chartQuery).then(res => {
+                    //this.charts[i - 1].all = [0, 182, 191, 0, 0, 0];
+                    //this.charts[i - 1].error = [0, 182, 191, 234, 290, 10];
+                    this.charts[i - 1].all = res.data.access;
+                    this.charts[i - 1].error = res.data.generate;
                     this.initChart(this.charts[i - 1]);
                     console.log(res);
                     this.loading = false;
@@ -167,7 +173,7 @@
                         {
                             name: 'all',
                             type: 'line',
-                            stack: 'Total',
+                            //stack: 'Total',
                             areaStyle: {},
                             emphasis: {
                                 focus: 'series'
@@ -177,7 +183,7 @@
                         {
                             name: 'error',
                             type: 'line',
-                            stack: 'Total',
+                            //stack: 'Total',
                             areaStyle: {},
                             emphasis: {
                                 focus: 'series'

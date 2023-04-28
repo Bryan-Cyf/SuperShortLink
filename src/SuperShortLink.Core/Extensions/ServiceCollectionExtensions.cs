@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SuperShortLink;
 using SuperShortLink.Cache;
+using SuperShortLink.Charts;
 using SuperShortLink.Repository;
 using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -59,6 +59,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
             services.AddTransient<Base62Converter>();
+
+            services.AddTransient<ChartFactory>();
+            services.AddTransient<IChart, HourChart>();
             return services;
         }
     }

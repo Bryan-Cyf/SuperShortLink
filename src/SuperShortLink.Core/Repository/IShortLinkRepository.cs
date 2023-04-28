@@ -1,4 +1,5 @@
 ﻿using SuperShortLink.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace SuperShortLink.Repository
@@ -29,6 +30,11 @@ namespace SuperShortLink.Repository
         /// <param name="merchantId"></param>
         /// <returns></returns>
         Task<int> UpdateAccessDataAsync(long id);
+
+        /// <summary>
+        /// 查询生成短链的数量
+        /// </summary>
+        Task<int> GetGenerateCountAsync(DateTime startTime, DateTime endTime);
 
         /// <summary>
         /// 查询短链信息

@@ -94,6 +94,24 @@ namespace SuperShortLink.Repository
         }
 
         /// <summary>
+        /// 查询生成短链的数量
+        /// </summary>
+        public async Task<int> GetGenerateCountAsync(DateTime startTime, DateTime endTime)
+        {
+            string sqlstr = @"select count(1)
+                              from short_link 
+                              where create_time >= @startTime and create_time < @endTime;";
+            var param = new
+            {
+                //startTime = startTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                //endTime = endTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                startTime,
+                endTime
+            };
+            var result = await base.QueryFirstOrDefaultAsync<int>(sqlstr, param);
+            return result;
+        }
+        /// <summary>
         /// 查询短链信息
         /// </summary>
         public async Task<UrlRecordModel> GetAsync(long id)
