@@ -33,7 +33,7 @@ namespace SuperShortLink
         }
 
         /// <summary>
-        /// 在线生成短链
+        /// 生成短链
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
@@ -43,7 +43,7 @@ namespace SuperShortLink
         }
 
         /// <summary>
-        /// 在线生成短链
+        /// 查询图表
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> GetChart([FromBody] GetChartRequest request)

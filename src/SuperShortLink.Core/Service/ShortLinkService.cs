@@ -1,12 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using SuperShortLink.Cache;
+﻿using SuperShortLink.Cache;
 using SuperShortLink.Helpers;
 using SuperShortLink.Models;
 using SuperShortLink.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SuperShortLink

@@ -22,7 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddShortLink(this IServiceCollection services, Action<ShortLinkOptions> configure)
         {
-
             services.AddOptions<ShortLinkOptions>()
                 .Configure(configure)
                 .ValidateDataAnnotations();
