@@ -74,9 +74,8 @@
                 shortUrl: '',
                 originUrl: '',
                 charts : [
-                    { chart: $('#hourChart'), id: 'hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
+                    { id: 'hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
                     {
-                        chart: $('#dayChart'),
                         id: '#dayChart',
                         labels: [
                             "1h", "2h", "3h", "4h", '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h',
@@ -84,11 +83,10 @@
                         ]
                     },
                     {
-                        chart: $('#weekChart'),
                         id: 'weekChart',
                         labels: ["Monday", "Tuesday", "Wednesday", "Thursday", 'Friday', 'Saturday', 'Sunday']
                     },
-                    { chart: $('#monthChart'), id: 'monthChart', labels: this.monthChartLabels() }
+                    { id: 'monthChart', labels: this.monthChartLabels() }
                 ],
             }
         },
@@ -119,10 +117,9 @@
                 this.chartQuery.ChartDataType = i-1;
                 this.loading = true;
                 axios.post("/Home/GetChart", this.chartQuery).then(res => {
-                    //this.charts[i - 1].all = [0, 182, 191, 0, 0, 0];
-                    //this.charts[i - 1].error = [0, 182, 191, 234, 290, 10];
                     this.charts[i - 1].access = res.data.access;
                     this.charts[i - 1].generate = res.data.generate;
+                    this.charts[i - 1].labels = res.data.labels;
                     this.initChart(this.charts[i - 1]);
                     console.log(res);
                     this.loading = false;
