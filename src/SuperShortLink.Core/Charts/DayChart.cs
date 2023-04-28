@@ -5,24 +5,23 @@ using System.Threading.Tasks;
 
 namespace SuperShortLink.Charts
 {
-    public class DayChart : IChart
+    public class DayChart : ChartAbstract
     {
-        public ChartTypeEnum ChartType => ChartTypeEnum.Day;
-        private readonly IShortLinkRepository _repository;
+        public override ChartTypeEnum ChartType => ChartTypeEnum.Day;
 
-        public DayChart(IShortLinkRepository repository)
+        public DayChart(IShortLinkRepository repository) : base(repository)
         {
-            _repository = repository;
+
         }
 
-        public async Task<GetChartsOutput> GetCharts()
+        public override async Task<GetChartsOutput> GetCharts()
         {
             var now = DateTime.Now;
             var hour = now.Hour;
+            var date = now.Date;
 
             var output = new GetChartsOutput(24);
 
-            var date = now.Date;
             for (var i = 0; i < 24; i++)
             {
                 if (i > hour)
@@ -33,17 +32,12 @@ namespace SuperShortLink.Charts
                 else
                 {
                     output.Access[i] = 1;
-                    output.Generate[i] = await CountAsync(date, i);
+                    output.Generate[i] = await GetGenerateCountAsync(date.AddHours(i), date.AddHours(i + 1));
                 }
+
                 output.Labels[i] = date.AddHours(i).ToString("HH:mm");
             }
             return output;
-        }
-
-
-        private async Task<int> CountAsync(DateTime time, int i)
-        {
-            return await _repository.GetGenerateCountAsync(time.AddHours(i), time.AddHours(i + 1));
         }
     }
 }

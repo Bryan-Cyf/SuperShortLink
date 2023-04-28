@@ -75,19 +75,10 @@
                 shortUrl: '',
                 originUrl: '',
                 charts : [
-                    { id: 'hourChart', labels: ["10m", "20m", "30m", "40m", '50m', '60m'] },
-                    {
-                        id: 'dayChart',
-                        labels: [
-                            "1h", "2h", "3h", "4h", '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h',
-                            '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h', '24h'
-                        ]
-                    },
-                    {
-                        id: 'weekChart',
-                        labels: ["Monday", "Tuesday", "Wednesday", "Thursday", 'Friday', 'Saturday', 'Sunday']
-                    },
-                    { id: 'monthChart', labels: this.monthChartLabels() }
+                    { id: 'hourChart' },
+                    { id: 'dayChart'  },
+                    { id: 'weekChart' },
+                    { id: 'monthChart'}
                 ],
             }
         },
@@ -191,16 +182,7 @@
                     ]
                 }
                 myChart.setOption(option)
-            },
-            monthChartLabels() {
-                var now = new Date();
-                month = parseInt(now.getMonth(), 10) + 1;
-                var days = new Date(now.getYear(), month, 0).getDate();
-                var res = [];
-                for (var i = 1; i <= days; i++) {
-                    res.push(i + "d");
-                }
-                return res;}
+            }
         }
     })
 </script>

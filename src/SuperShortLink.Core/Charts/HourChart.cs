@@ -5,17 +5,16 @@ using System.Threading.Tasks;
 
 namespace SuperShortLink.Charts
 {
-    public class HourChart : IChart
+    public class HourChart : ChartAbstract
     {
-        public ChartTypeEnum ChartType => ChartTypeEnum.Hour;
-        private readonly IShortLinkRepository _repository;
+        public override ChartTypeEnum ChartType => ChartTypeEnum.Hour;
 
-        public HourChart(IShortLinkRepository repository)
+        public HourChart(IShortLinkRepository repository) : base(repository)
         {
-            _repository = repository;
+
         }
 
-        public async Task<GetChartsOutput> GetCharts()
+        public override async Task<GetChartsOutput> GetCharts()
         {
             var now = DateTime.Now;
             var minute = now.Minute;
@@ -32,16 +31,12 @@ namespace SuperShortLink.Charts
                 else
                 {
                     output.Access[i / 10] = 0;
-                    output.Generate[i / 10] = await CountAsync(hourTime, i);
+                    output.Generate[i / 10] = await GetGenerateCountAsync(hourTime.AddMinutes(i), hourTime.AddMinutes(i + 10));
                 }
+
                 output.Labels[i / 10] = hourTime.AddMinutes(i).ToString("HH:mm");
             }
             return output;
-        }
-
-        private async Task<int> CountAsync(DateTime time, int i)
-        {
-            return await _repository.GetGenerateCountAsync(time.AddMinutes(i), time.AddMinutes(i + 10));
         }
     }
 }
