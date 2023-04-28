@@ -44,11 +44,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     x.CacheCountLimit = defaultOption.CacheCountLimit;
                 }
-                //var suportDatabase = new List<DatabaseType>() { DatabaseType.PostgreSQL, DatabaseType.MySQL };
-                //if (!suportDatabase.Contains(x.DbType))
-                //{
-                //    throw new ArgumentException("暂不支持该数据库");
-                //}
             });
 
             services.AddTransient<IShortLinkService, ShortLinkService>();
