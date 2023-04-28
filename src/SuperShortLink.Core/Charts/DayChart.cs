@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace SuperShortLink.Charts
 {
-    public class DayLogChart : IChart
+    public class DayChart : IChart
     {
         public ChartTypeEnum ChartType => ChartTypeEnum.Day;
         private readonly IShortLinkRepository _repository;
 
-        public DayLogChart(IShortLinkRepository repository)
+        public DayChart(IShortLinkRepository repository)
         {
             _repository = repository;
         }
@@ -32,11 +32,10 @@ namespace SuperShortLink.Charts
                 }
                 else
                 {
-                    var startTime = date.AddHours(i);
                     output.Access[i] = 1;
-                    output.Generate[i] = await CountAsync(startTime, i);
-                    //output.Labels[i] = dtNow.AddMinutes(-i).ToString("HH:mm:ss");
+                    output.Generate[i] = await CountAsync(date, i);
                 }
+                output.Labels[i] = date.AddHours(i).ToString("HH:mm");
             }
             return output;
         }
@@ -44,12 +43,7 @@ namespace SuperShortLink.Charts
 
         private async Task<int> CountAsync(DateTime time, int i)
         {
-            return await _repository.GetGenerateCountAsync(time.AddMinutes(-i), time.AddMinutes(-i + 10));
+            return await _repository.GetGenerateCountAsync(time.AddHours(i), time.AddHours(i + 1));
         }
-
-        //private async Task<int> CountAsync<T>(string level, IRepository<T> repository, DateTime startTime, int i) where T : class, ILogModel
-        //{
-        //    return await repository.CountAsync(x => x.LongDate >= startTime && x.LongDate <= startTime.AddMinutes(59).AddSeconds(59) && x.Level == level);
-        //}
     }
 }

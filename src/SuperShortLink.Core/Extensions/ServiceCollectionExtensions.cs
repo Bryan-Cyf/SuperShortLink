@@ -62,6 +62,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<ChartFactory>();
             services.AddTransient<IChart, HourChart>();
+            services.AddTransient<IChart, DayChart>();
+
             return services;
         }
     }

@@ -34,7 +34,7 @@ namespace SuperShortLink.Charts
                     output.Access[i / 10] = 0;
                     output.Generate[i / 10] = await CountAsync(hourTime, i);
                 }
-                output.Labels[i / 10] = hourTime.AddMinutes(i).ToString("HH:mm:ss");
+                output.Labels[i / 10] = hourTime.AddMinutes(i).ToString("HH:mm");
             }
             return output;
         }
