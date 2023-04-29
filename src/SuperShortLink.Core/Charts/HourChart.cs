@@ -21,20 +21,20 @@ namespace SuperShortLink.Charts
             var hourTime = DateTime.Now.Date.AddHours(now.Hour);
             var output = new GetChartsOutput(6);
 
-            for (var i = 0; i < 60; i += 10)
+            for (var i = 0; i < 6; i += 1)
             {
                 if (i > minute)
                 {
-                    output.Access[i / 10] = 0;
-                    output.Generate[i / 10] = 0;
+                    output.Access[i] = 0;
+                    output.Generate[i] = 0;
                 }
                 else
                 {
-                    output.Access[i / 10] = 0;
-                    output.Generate[i / 10] = await GetGenerateCountAsync(hourTime.AddMinutes(i), hourTime.AddMinutes(i + 10));
+                    output.Access[i] = 0;
+                    output.Generate[i] = await GetGenerateCountAsync(hourTime.AddMinutes(i * 10), hourTime.AddMinutes(i * 10 + 10));
                 }
 
-                output.Labels[i / 10] = hourTime.AddMinutes(i).ToString("HH:mm");
+                output.Labels[i] = hourTime.AddMinutes(i * 10).ToString("HH:mm");
             }
             return output;
         }
