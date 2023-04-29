@@ -7,11 +7,14 @@ namespace SuperShortLink.Charts
 {
     public abstract class ChartAbstract : IChart
     {
-        private readonly IShortLinkRepository _repository;
+        private readonly IShortLinkRepository _linkRepository;
+        private readonly ILogRepository _logRepository;
 
-        public ChartAbstract(IShortLinkRepository repository)
+        public ChartAbstract(IShortLinkRepository inkRepository, 
+            ILogRepository logRepository)
         {
-            _repository = repository;
+            _linkRepository = inkRepository;
+            _logRepository = logRepository;
         }
 
         public abstract ChartTypeEnum ChartType { get; }
@@ -20,7 +23,12 @@ namespace SuperShortLink.Charts
 
         protected async Task<int> GetGenerateCountAsync(DateTime start, DateTime end)
         {
-            return await _repository.GetGenerateCountAsync(start, end);
+            return await _linkRepository.GetCountAsync(start, end);
+        }
+
+        protected async Task<int> GetAccessCountAsync(DateTime start, DateTime end)
+        {
+            return await _logRepository.GetCountAsync(start, end);
         }
     }
 }

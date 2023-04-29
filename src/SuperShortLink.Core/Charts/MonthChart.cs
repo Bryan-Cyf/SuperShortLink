@@ -9,7 +9,8 @@ namespace SuperShortLink.Charts
     {
         public override ChartTypeEnum ChartType => ChartTypeEnum.Month;
 
-        public MonthChart(IShortLinkRepository repository) : base(repository)
+        public MonthChart(IShortLinkRepository linkRepository,
+            ILogRepository logRepository) : base(linkRepository, logRepository)
         {
 
         }
@@ -32,9 +33,10 @@ namespace SuperShortLink.Charts
                 }
                 else
                 {
-                    var dayTime = date.AddDays(i);
-                    output.Generate[i] = await GetGenerateCountAsync(dayTime, dayTime.AddDays(1));
-                    output.Access[i] = 0;
+                    var start = date.AddDays(i);
+                    var end = date.AddDays(i + 1);
+                    output.Access[i] = await GetAccessCountAsync(start, end);
+                    output.Generate[i] = await GetGenerateCountAsync(start, end);
                 }
 
                 output.Labels[i] = date.AddDays(i).ToString("MM-dd");

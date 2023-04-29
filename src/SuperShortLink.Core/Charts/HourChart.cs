@@ -9,7 +9,8 @@ namespace SuperShortLink.Charts
     {
         public override ChartTypeEnum ChartType => ChartTypeEnum.Hour;
 
-        public HourChart(IShortLinkRepository repository) : base(repository)
+        public HourChart(IShortLinkRepository linkRepository,
+            ILogRepository logRepository) : base(linkRepository, logRepository)
         {
 
         }
@@ -30,8 +31,10 @@ namespace SuperShortLink.Charts
                 }
                 else
                 {
-                    output.Access[i] = 0;
-                    output.Generate[i] = await GetGenerateCountAsync(hourTime.AddMinutes(i * 10), hourTime.AddMinutes(i * 10 + 10));
+                    var start = hourTime.AddMinutes(i * 10);
+                    var end = hourTime.AddMinutes(i * 10 + 10);
+                    output.Access[i] = await GetAccessCountAsync(start, end);
+                    output.Generate[i] = await GetGenerateCountAsync(start, end);
                 }
 
                 output.Labels[i] = hourTime.AddMinutes(i * 10).ToString("HH:mm");

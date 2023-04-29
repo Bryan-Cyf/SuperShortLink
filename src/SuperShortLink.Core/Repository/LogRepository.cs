@@ -29,5 +29,22 @@ namespace SuperShortLink.Repository
 
             await base.ExecuteAsync(sb.ToString(), model);
         }
+
+        /// <summary>
+        /// 查询短链访问的数量
+        /// </summary>
+        public async Task<int> GetCountAsync(DateTime startTime, DateTime endTime)
+        {
+            string sqlstr = @"select count(1)
+                              from short_link_log 
+                              where create_time >= @startTime and create_time < @endTime;";
+            var param = new
+            {
+                startTime,
+                endTime
+            };
+            var result = await base.QueryFirstOrDefaultAsync<int>(sqlstr, param);
+            return result;
+        }
     }
 }

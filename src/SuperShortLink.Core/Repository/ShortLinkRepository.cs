@@ -87,7 +87,7 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 查询生成短链的数量
         /// </summary>
-        public async Task<int> GetGenerateCountAsync(DateTime startTime, DateTime endTime)
+        public async Task<int> GetCountAsync(DateTime startTime, DateTime endTime)
         {
             string sqlstr = @"select count(1)
                               from short_link 
@@ -100,6 +100,7 @@ namespace SuperShortLink.Repository
             var result = await base.QueryFirstOrDefaultAsync<int>(sqlstr, param);
             return result;
         }
+
         /// <summary>
         /// 查询短链信息
         /// </summary>

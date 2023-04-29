@@ -9,7 +9,8 @@ namespace SuperShortLink.Charts
     {
         public override ChartTypeEnum ChartType => ChartTypeEnum.Week;
 
-        public WeekChart(IShortLinkRepository repository) : base(repository)
+        public WeekChart(IShortLinkRepository linkRepository,
+            ILogRepository logRepository) : base(linkRepository, logRepository)
         {
 
         }
@@ -33,8 +34,10 @@ namespace SuperShortLink.Charts
                 }
                 else
                 {
-                    output.Generate[i] = await GetGenerateCountAsync(day, day.AddDays(1));
-                    output.Access[i] = 0;
+                    var start = day;
+                    var end = day.AddDays(1);
+                    output.Access[i] = await GetAccessCountAsync(start, end);
+                    output.Generate[i] = await GetGenerateCountAsync(start, end);
                 }
 
                 output.Labels[i] = $"{day.ToString("MM-dd")}|{((DayOfWeek)(i == 6 ? 0 : i + 1))}";

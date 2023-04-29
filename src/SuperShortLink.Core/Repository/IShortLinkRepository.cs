@@ -25,7 +25,7 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 查询生成短链的数量
         /// </summary>
-        Task<int> GetGenerateCountAsync(DateTime startTime, DateTime endTime);
+        Task<int> GetCountAsync(DateTime startTime, DateTime endTime);
 
         /// <summary>
         /// 查询短链信息

@@ -10,5 +10,10 @@ namespace SuperShortLink.Repository
         /// 插入
         /// </summary>
         Task InsertAsync(LogModel model);
+
+        /// <summary>
+        /// 查询短链访问的数量
+        /// </summary>
+        Task<int> GetCountAsync(DateTime startTime, DateTime endTime);
     }
 }

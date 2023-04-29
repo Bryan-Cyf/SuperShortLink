@@ -9,7 +9,8 @@ namespace SuperShortLink.Charts
     {
         public override ChartTypeEnum ChartType => ChartTypeEnum.Day;
 
-        public DayChart(IShortLinkRepository repository) : base(repository)
+        public DayChart(IShortLinkRepository linkRepository,
+            ILogRepository logRepository) : base(linkRepository, logRepository)
         {
 
         }
@@ -32,8 +33,10 @@ namespace SuperShortLink.Charts
                 }
                 else
                 {
-                    output.Access[i] = 1;
-                    output.Generate[i] = await GetGenerateCountAsync(date.AddHours(i), date.AddHours(i + 1));
+                    var start = date.AddHours(i);
+                    var end = date.AddHours(i + 1);
+                    output.Access[i] = await GetAccessCountAsync(start, end);
+                    output.Generate[i] = await GetGenerateCountAsync(start, end);
                 }
 
                 output.Labels[i] = date.AddHours(i).ToString("HH:mm");
