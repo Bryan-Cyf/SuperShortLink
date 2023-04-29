@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "在线生成";
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="text-center" id="main" style="text-align:left !important;">
@@ -15,177 +15,175 @@
         </div>
     </el-card>
     <el-card>
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#hourChartPanel" @@click="getChart(1)" role="tab" aria-controls="overview" aria-selected="true">小时</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#dayChartPanel" @@click="getChart(2)" role="tab" aria-controls="environment" aria-selected="false">天</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#weekChartPanel" @@click="getChart(3)" role="tab" aria-controls="environment" aria-selected="false">周</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#monthChartPanel" @@click="getChart(4)" role="tab" aria-controls="environment" aria-selected="false">月</a>
-                    </li>
-                </ul>
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#hourChartPanel" @@click="getChart(1)" role="tab" aria-controls="overview" aria-selected="true">小时</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#dayChartPanel" @@click="getChart(2)" role="tab" aria-controls="environment" aria-selected="false">天</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#weekChartPanel" @@click="getChart(3)" role="tab" aria-controls="environment" aria-selected="false">周</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#monthChartPanel" @@click="getChart(4)" role="tab" aria-controls="environment" aria-selected="false">月</a>
+                </li>
+            </ul>
 
-                <div class="tab-content">
-                    <div class="tab-pane active" id="hourChartPanel" role="tabpanel">
-                        <div class="table-responsive">
-                            <div id="hourChart" style="width:100%;height:450px;"></div>
-                        </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="hourChartPanel" role="tabpanel">
+                    <div class="table-responsive">
+                        <div id="hourChart" style="width:100%;height:450px;"></div>
                     </div>
-                    <div class="tab-pane" id="dayChartPanel" role="tabpanel">
-                        <div class="table-responsive">
-                            <div id="dayChart" style="width:100%;height:450px;"></div>
-                        </div>
-                    </div>                   
-                    <div class="tab-pane" id="weekChartPanel" role="tabpanel">
-                        <div class="table-responsive">
-                            <div id="weekChart" style="width:100%;height:450px;"></div>
-                        </div>
-                    </div>                  
-                    <div class="tab-pane" id="monthChartPanel" role="tabpanel">
-                        <div class="table-responsive">
-                            <div id="monthChart" style="width:100%;height:450px;"></div>
-                        </div>
-                    </div>                   
- 
+                </div>
+                <div class="tab-pane" id="dayChartPanel" role="tabpanel">
+                    <div class="table-responsive">
+                        <div id="dayChart" style="width:100%;height:450px;"></div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="weekChartPanel" role="tabpanel">
+                    <div class="table-responsive">
+                        <div id="weekChart" style="width:100%;height:450px;"></div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="monthChartPanel" role="tabpanel">
+                    <div class="table-responsive">
+                        <div id="monthChart" style="width:100%;height:450px;"></div>
+                    </div>
                 </div>
             </div>
+        </div>
     </el-card>
 </div>
 @section Scripts
     {
-<script>
-    let app = new Vue({
-        el: "#main",
-        data() {
-            return {
-                loading: false,
-                query: {
-                    generate_url: ''
-                },
-                chartQuery: {
-                    ChartDataType: 0
-                },
-                shortUrl: '',
-                originUrl: '',
-                charts : [
-                    { id: 'hourChart' },
-                    { id: 'dayChart'  },
-                    { id: 'weekChart' },
-                    { id: 'monthChart'}
-                ],
-            }
-        },
-        created() {
-            console.log("init!")
-        },
-        mounted() {
-            this.getChart(1)
-        },
-        methods: {
-            generateUrl() {
-                sessionStorage.setItem("_query", JSON.stringify(this.query));
-                this.loading = true;
-                axios.post("/Home/Generate", this.query).then(res => {
-                    this.shortUrl = window.location.origin + "/" + res.data.short_url;
-                    this.originUrl = res.data.origin_url;
-                    console.log(res);
-                    this.loading = false;
-                }).catch(err => {
-                    this.loading = false;
-                    this.$notify({
-                        message: "请求失败，请检查输入",
-                        type: 'warning'
-                    });
-                });
-            },
-            getChart(i) {
-                this.chartQuery.ChartDataType = i-1;
-                this.loading = true;
-                axios.post("/Home/GetChart", this.chartQuery).then(res => {
-                    this.charts[i - 1].access = res.data.access;
-                    this.charts[i - 1].generate = res.data.generate;
-                    this.charts[i - 1].labels = res.data.labels;
-                    this.charts[i - 1].title = res.data.title;
-                    this.initChart(this.charts[i - 1]);
-                    console.log(res);
-                    this.loading = false;
-                }).catch(err => {
-                    this.loading = false;
-                    this.$notify({
-                        message: "请求失败，请检查输入",
-                        type: 'warning'
-                    });
-                });
-            },
-            initChart(opt) {
-                let myChart = echarts.init(document.getElementById(opt.id))
-                let option = {
-                    title: {
-                        text: opt.title
+    <script>
+        let app = new Vue({
+            el: "#main",
+            data() {
+                return {
+                    loading: false,
+                    query: {
+                        generate_url: ''
                     },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            label: {
-                                backgroundColor: '#6a7985'
-                            }
-                        }
+                    chartQuery: {
+                        ChartDataType: 0
                     },
-                    legend: {
-                        icon: "rect",
-                        itemGap: 20,
-                        data: ['访问数', '生成数']
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: opt.labels
-                        }
+                    shortUrl: '',
+                    originUrl: '',
+                    charts: [
+                        { id: 'hourChart' },
+                        { id: 'dayChart' },
+                        { id: 'weekChart' },
+                        { id: 'monthChart' }
                     ],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '访问数',
-                            type: 'line',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: opt.access
-                        },
-                        {
-                            name: '生成数',
-                            type: 'line',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: opt.generate
-                        }
-                    ]
                 }
-                myChart.setOption(option)
+            },
+            created() {
+                console.log("init!")
+            },
+            mounted() {
+                this.getChart(1)
+            },
+            methods: {
+                generateUrl() {
+                    sessionStorage.setItem("_query", JSON.stringify(this.query));
+                    this.loading = true;
+                    axios.post("/Home/Generate", this.query).then(res => {
+                        this.shortUrl = window.location.origin + "/" + res.data.short_url;
+                        this.originUrl = res.data.origin_url;
+                        console.log(res);
+                        this.loading = false;
+                    }).catch(err => {
+                        this.loading = false;
+                        this.$notify({
+                            message: "请求失败，请检查输入",
+                            type: 'warning'
+                        });
+                    });
+                },
+                getChart(i) {
+                    this.chartQuery.ChartDataType = i - 1;
+                    this.loading = true;
+                    axios.post("/Home/GetChart", this.chartQuery).then(res => {
+                        this.charts[i - 1].access = res.data.access;
+                        this.charts[i - 1].generate = res.data.generate;
+                        this.charts[i - 1].labels = res.data.labels;
+                        this.charts[i - 1].title = res.data.title;
+                        this.initChart(this.charts[i - 1]);
+                        console.log(res);
+                        this.loading = false;
+                    }).catch(err => {
+                        this.loading = false;
+                        this.$notify({
+                            message: "请求失败，请检查输入",
+                            type: 'warning'
+                        });
+                    });
+                },
+                initChart(opt) {
+                    let myChart = echarts.init(document.getElementById(opt.id))
+                    let option = {
+                        title: {
+                            text: opt.title
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
+                        },
+                        legend: {
+                            icon: "rect",
+                            itemGap: 20,
+                            data: ['访问数', '生成数']
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: opt.labels
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '访问数',
+                                type: 'line',
+                                areaStyle: {},
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                data: opt.access
+                            },
+                            {
+                                name: '生成数',
+                                type: 'line',
+                                areaStyle: {},
+                                emphasis: {
+                                    focus: 'series'
+                                },
+                                data: opt.generate
+                            }
+                        ]
+                    }
+                    myChart.setOption(option)
+                }
             }
-        }
-    })
-</script>
+        })
+    </script>
 }
