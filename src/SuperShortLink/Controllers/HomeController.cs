@@ -49,7 +49,7 @@ namespace SuperShortLink
         public async Task<IActionResult> GetChart([FromBody] GetChartRequest request)
         {
             var result = await _chartFactory.GetChart(request.ChartDataType).GetCharts();
-            return base.Json(new { access = result.Access, generate = result.Generate, labels = result.Labels });
+            return base.Json(new { access = result.Access, generate = result.Generate, labels = result.Labels, title = result.Title });
         }
 
         #endregion

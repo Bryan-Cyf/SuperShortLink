@@ -112,6 +112,7 @@
                     this.charts[i - 1].access = res.data.access;
                     this.charts[i - 1].generate = res.data.generate;
                     this.charts[i - 1].labels = res.data.labels;
+                    this.charts[i - 1].title = res.data.title;
                     this.initChart(this.charts[i - 1]);
                     console.log(res);
                     this.loading = false;
@@ -126,6 +127,9 @@
             initChart(opt) {
                 let myChart = echarts.init(document.getElementById(opt.id))
                 let option = {
+                    title: {
+                        text: opt.title
+                    },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {

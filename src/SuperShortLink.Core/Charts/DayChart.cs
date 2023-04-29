@@ -21,6 +21,7 @@ namespace SuperShortLink.Charts
             var date = now.Date;
 
             var output = new GetChartsOutput(24);
+            output.Title = now.ToString("yyyy-MM-dd");
 
             for (var i = 0; i < 24; i++)
             {

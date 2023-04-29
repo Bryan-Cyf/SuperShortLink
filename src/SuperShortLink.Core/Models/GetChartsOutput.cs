@@ -14,5 +14,7 @@
         public int[] Generate { get; set; }
 
         public string[] Labels { get; set; }
+
+        public string Title { get; set; }
     }
 }

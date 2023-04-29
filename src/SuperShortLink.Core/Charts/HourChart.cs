@@ -20,7 +20,7 @@ namespace SuperShortLink.Charts
             var minute = now.Minute;
             var hourTime = DateTime.Now.Date.AddHours(now.Hour);
             var output = new GetChartsOutput(6);
-
+            output.Title = hourTime.ToString("yyyy-MM-dd HH:mm");
             for (var i = 0; i < 6; i += 1)
             {
                 if (i > minute)

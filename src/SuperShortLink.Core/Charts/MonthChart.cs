@@ -21,6 +21,7 @@ namespace SuperShortLink.Charts
             var day = now.Day;
             var output = new GetChartsOutput(days);
             var date = new DateTime(now.Year, now.Month, 1);
+            output.Title = now.ToString("yyyy-MM");
 
             for (var i = 0; i < days; i++)
             {

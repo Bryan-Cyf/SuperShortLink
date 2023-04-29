@@ -21,6 +21,8 @@ namespace SuperShortLink.Charts
             var dayOfWeek = now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)now.DayOfWeek;
 
             var output = new GetChartsOutput(7);
+            output.Title = $"{now.AddDays(-dayOfWeek + 1).ToString("yyyy-MM-dd")}~{now.AddDays(-dayOfWeek + 7).ToString("yyyy-MM-dd")}";
+
             for (var i = 0; i < 7; i++)
             {
                 var day = now.AddDays(0 - (dayOfWeek - i) + 1);
