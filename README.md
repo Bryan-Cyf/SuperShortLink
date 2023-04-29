@@ -25,12 +25,12 @@
 ## 文档
 ---------
 
-- 项目的运行及接入，看这个文档
-### [项目运行及接入文档](https://chenyuefeng.blog.csdn.net/article/details/130222045)
+1. 快速开始：项目的运行及接入
+### [快速开始](https://chenyuefeng.blog.csdn.net/article/details/130222045)
 
 ---------
 
-- 项目的整体架构设计，加解密混淆算法原理，看这个文档
+2. 架构设计及原理：项目的整体架构设计，加解密混淆算法原理
 ### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
 
 ----------
@@ -39,12 +39,15 @@
 - 登录页
 
 ![](media/web-login.png?raw=true)
-- 短链列表页
 
-![](media/web-list.png?raw=true)
-- 短链生成页
+- 首页Dashboard
 
 ![](media/web-generate.png?raw=true)
+
+- 列表页
+
+![](media/web-list.png?raw=true)
+
 - 应用列表页
 
 ![](media/web-application-create.png?raw=true)
