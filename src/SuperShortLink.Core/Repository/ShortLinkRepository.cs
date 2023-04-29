@@ -19,10 +19,7 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 插入短链
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="merchantId"></param>
-        /// <returns></returns>
-        public async Task<int> InsertAsync(UrlRecordModel model)
+        public async Task<int> InsertAsync(LinkModel model)
         {
             var sb = new StringBuilder(
               @"insert into short_link
@@ -39,10 +36,7 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 更新短链
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="merchantId"></param>
-        /// <returns></returns>
-        public async Task<int> UpdateShortUrlAsync(UrlRecordModel model)
+        public async Task<int> UpdateShortUrlAsync(LinkModel model)
         {
             string sqlstr = @"update short_link
                               set short_url=@short_url,update_time=@update_time
@@ -60,9 +54,6 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 更新短链访问次数
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="merchantId"></param>
-        /// <returns></returns>
         public async Task<int> UpdateAccessDataAsync(long id)
         {
             string sqlstr = @"update short_link
@@ -103,8 +94,6 @@ namespace SuperShortLink.Repository
                               where create_time >= @startTime and create_time < @endTime;";
             var param = new
             {
-                //startTime = startTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                //endTime = endTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 startTime,
                 endTime
             };
@@ -114,7 +103,7 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 查询短链信息
         /// </summary>
-        public async Task<UrlRecordModel> GetAsync(long id)
+        public async Task<LinkModel> GetAsync(long id)
         {
             string sqlstr = @"select *
                               from short_link 
@@ -123,14 +112,14 @@ namespace SuperShortLink.Repository
             {
                 Id = id,
             };
-            var result = await base.QueryFirstOrDefaultAsync<UrlRecordModel>(sqlstr, param);
+            var result = await base.QueryFirstOrDefaultAsync<LinkModel>(sqlstr, param);
             return result;
         }
 
         /// <summary>
         /// 分页查询短链信息
         /// </summary>
-        public async Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto)
+        public async Task<PageResponseDto<LinkModel>> GetListAsync(RecordListRequest dto)
         {
             var sb = new StringBuilder(@"select *
                                          from short_link 
@@ -149,7 +138,7 @@ namespace SuperShortLink.Repository
 
             var orderSql = " order by id desc";
 
-            return await base.PageQueryAsync<UrlRecordModel>(sb.ToString(), dto, orderSql, dto);
+            return await base.PageQueryAsync<LinkModel>(sb.ToString(), dto, orderSql, dto);
         }
     }
 }

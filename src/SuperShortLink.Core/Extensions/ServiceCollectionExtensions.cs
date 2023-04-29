@@ -51,6 +51,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IApplicationService, ApplicationService>();
             services.AddTransient<IApplicationRepository, ApplicationRepository>();
 
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ILogRepository, LogRepository>();
+
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
             services.AddTransient<Base62Converter>();
 
