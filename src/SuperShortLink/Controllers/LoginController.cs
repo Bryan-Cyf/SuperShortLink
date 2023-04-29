@@ -29,7 +29,7 @@ namespace SuperShortLink
             {
                 HttpContext.Response.Cookies.Append("token", LoginConst.GetToken(_loginInfo.UserName, _loginInfo.Password),
                     new CookieOptions() { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(2) });
-                return Redirect("/Home/Index");
+                return Redirect("/Home/Dashboard");
             }
 
             return View(nameof(Index));

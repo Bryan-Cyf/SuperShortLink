@@ -1,12 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using SuperShortLink.Cache;
+﻿using SuperShortLink.Cache;
 using SuperShortLink.Helpers;
 using SuperShortLink.Models;
 using SuperShortLink.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SuperShortLink
@@ -16,20 +11,22 @@ namespace SuperShortLink
         private readonly IShortLinkRepository _repository;
         private readonly IMemoryCaching _memory;
         private readonly Base62Converter _converter;
-
+        private readonly ILogService _logService;
         public ShortLinkService(IShortLinkRepository repository,
             IMemoryCaching memory,
-            Base62Converter converter)
+            Base62Converter converter,
+            ILogService logService)
         {
             _repository = repository;
             _memory = memory;
             _converter = converter;
+            _logService = logService;
         }
 
         /// <summary>
         /// 分页查询短链信息
         /// </summary>
-        public async Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto)
+        public async Task<PageResponseDto<LinkModel>> GetListAsync(RecordListRequest dto)
         {
             return await _repository.GetListAsync(dto);
         }
@@ -50,7 +47,7 @@ namespace SuperShortLink
                 return cacheUrl.Value;
             }
 
-            var model = UrlRecordModel.GenDefault(originUrl);
+            var model = LinkModel.GenDefault(originUrl);
 
             var id = await _repository.InsertAsync(model);
             var shortKey = _converter.Confuse(id);
@@ -91,6 +88,7 @@ namespace SuperShortLink
                 }
 
                 await _repository.UpdateAccessDataAsync(id);
+                await _logService.Insert(id);
             }
             else
             {

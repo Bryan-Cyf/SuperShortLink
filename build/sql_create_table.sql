@@ -21,7 +21,15 @@ CREATE TABLE short_link_appication (
     status      INT(11)        NOT NULL,
 PRIMARY KEY (app_id) USING BTREE
 );
-
+CREATE TABLE short_link_log (
+	log_id       INT(11)      NOT NULL AUTO_INCREMENT,
+	link_id      INT(11)      NOT NULL,
+	ip           VARCHAR(255) NOT NULL,
+	os_type      INT(11)      NOT NULL,
+	browser_type INT(11)      NOT NULL,
+	create_time  TIMESTAMP(0) NOT NULL,
+PRIMARY KEY (log_id) USING BTREE
+);
 -- ----------------------------
 -- PostgreSQL
 -- ----------------------------
@@ -46,6 +54,15 @@ CREATE TABLE short_link_appication (
 CONSTRAINT pk_short_link_appication PRIMARY KEY (app_id) 
 );
 
+CREATE TABLE short_link_log (
+	log_id       SERIAL       NOT NULL,
+	link_id      INT4         NOT NULL,
+	ip           VARCHAR(255) NOT NULL,
+	os_type      INT4         NOT NULL,
+	browser_type INT4         NOT NULL,
+	create_time  TIMESTAMP    NOT NULL,
+CONSTRAINT pk_short_link_log PRIMARY KEY (log_id) 
+);
 -- ----------------------------
 -- SQLServer
 -- ----------------------------

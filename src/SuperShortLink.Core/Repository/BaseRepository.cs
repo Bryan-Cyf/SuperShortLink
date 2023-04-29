@@ -21,12 +21,6 @@ namespace SuperShortLink.Repository
         /// <summary>
         /// 分页通用方法
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <param name="page"></param>
-        /// <param name="param"></param>
-        /// <param name="orderSql"></param>
-        /// <returns></returns>
         protected async Task<PageResponseDto<T>> PageQueryAsync<T>(string sql, PageRequestDto page, string orderSql = "", object param = null)
         {
             PageResponseDto<T> result = new PageResponseDto<T>();

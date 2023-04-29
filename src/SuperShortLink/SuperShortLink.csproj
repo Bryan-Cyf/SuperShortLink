@@ -65,6 +65,13 @@
 		<ProjectReference Include="..\SuperShortLink.Core\SuperShortLink.Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Views\Shared\_Layout.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

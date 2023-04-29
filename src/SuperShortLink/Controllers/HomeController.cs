@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SuperShortLink.Cache;
+using SuperShortLink.Charts;
 using SuperShortLink.Helpers;
 using SuperShortLink.Models;
 using SuperShortLink.Repository;
@@ -13,12 +14,45 @@ namespace SuperShortLink
     {
         private readonly IShortLinkService _shortLinkService;
         private readonly IApplicationService _applicationService;
+        private readonly ChartFactory _chartFactory;
+
         public HomeController(IShortLinkService shortLinkService
-            , IApplicationService applicationService)
+            , IApplicationService applicationService
+            , ChartFactory chartFactory)
         {
             _shortLinkService = shortLinkService;
             _applicationService = applicationService;
+            _chartFactory = chartFactory;
         }
+
+        #region 面板
+
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 生成短链
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
+        {
+            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
+            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
+        }
+
+        /// <summary>
+        /// 查询图表
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> GetChart([FromBody] GetChartRequest request)
+        {
+            var result = await _chartFactory.GetChart(request.ChartDataType).GetCharts();
+            return base.Json(new { access = result.Access, generate = result.Generate, labels = result.Labels, title = result.Title });
+        }
+
+        #endregion
 
         #region 短链列表
 
@@ -36,25 +70,6 @@ namespace SuperShortLink
             var pageData = await _shortLinkService.GetListAsync(request);
 
             return base.Json(new { pageData }, DateTimeConvertor.Serializer);
-        }
-
-        #endregion
-
-        #region 在线生成
-
-        public IActionResult Transfer()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// 在线生成短链
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> Generate([FromBody] GenerateRequest request)
-        {
-            var shortURL = await _shortLinkService.GenerateAsync(request.generate_url);
-            return base.Json(new { short_url = shortURL, origin_url = request.generate_url });
         }
 
         #endregion

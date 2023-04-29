@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SuperShortLink;
 using SuperShortLink.Cache;
+using SuperShortLink.Charts;
 using SuperShortLink.Repository;
 using System;
-using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,7 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddShortLink(this IServiceCollection services, Action<ShortLinkOptions> configure)
         {
-
             services.AddOptions<ShortLinkOptions>()
                 .Configure(configure)
                 .ValidateDataAnnotations();
@@ -44,11 +43,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     x.CacheCountLimit = defaultOption.CacheCountLimit;
                 }
-                //var suportDatabase = new List<DatabaseType>() { DatabaseType.PostgreSQL, DatabaseType.MySQL };
-                //if (!suportDatabase.Contains(x.DbType))
-                //{
-                //    throw new ArgumentException("暂不支持该数据库");
-                //}
             });
 
             services.AddTransient<IShortLinkService, ShortLinkService>();
@@ -57,8 +51,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IApplicationService, ApplicationService>();
             services.AddTransient<IApplicationRepository, ApplicationRepository>();
 
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ILogRepository, LogRepository>();
+
             services.AddSingleton<IMemoryCaching, MemoryCaching>();
             services.AddTransient<Base62Converter>();
+
+            services.AddTransient<ChartFactory>();
+            services.AddTransient<IChart, HourChart>();
+            services.AddTransient<IChart, DayChart>();
+            services.AddTransient<IChart, WeekChart>();
+            services.AddTransient<IChart, MonthChart>();
+
             return services;
         }
     }

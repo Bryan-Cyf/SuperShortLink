@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SuperShortLink.Models
 {
-    public class UrlRecordModel
+    public class LinkModel
     {
         public int id { get; set; }
 
@@ -39,9 +39,9 @@ namespace SuperShortLink.Models
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static UrlRecordModel GenDefault(string url)
+        public static LinkModel GenDefault(string url)
         {
-            return new UrlRecordModel()
+            return new LinkModel()
             {
                 create_time = DateTime.Now,
                 update_time = DateTime.Now,

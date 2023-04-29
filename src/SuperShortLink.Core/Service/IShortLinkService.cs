@@ -12,7 +12,7 @@ namespace SuperShortLink
         /// <summary>
         /// 分页查询短链信息
         /// </summary>
-        Task<PageResponseDto<UrlRecordModel>> GetListAsync(RecordListRequest dto);
+        Task<PageResponseDto<LinkModel>> GetListAsync(RecordListRequest dto);
 
         /// <summary>
         /// 生成短链
