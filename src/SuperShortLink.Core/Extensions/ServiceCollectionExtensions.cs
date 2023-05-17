@@ -45,6 +45,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             });
 
+            services.AddHttpContextAccessor();
+
             services.AddTransient<IShortLinkService, ShortLinkService>();
             services.AddTransient<IShortLinkRepository, ShortLinkRepository>();
 
