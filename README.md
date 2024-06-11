@@ -1,4 +1,27 @@
+<p align="center">
+    <a href="https://github.com/Bryan-Cyf/SuperShortLink" target="_blank" rel="noopener noreferrer">
+        <img width="100" src="https://github.com/Bryan-Cyf/SuperShortLink/blob/master/media/nuget-icon.png" alt="EasyNotice logo" />
+    </a>
+</p>
 
+<p align="center"><b>SuperShortLink</b>强大易用的短链生成及监控系统</p>
+
+<p align="center">
+<a href="https://www.nuget.org/packages/SuperShortLink.Core"><img alt="nuget release" src="https://img.shields.io/nuget/v/SuperShortLink.Core" /></a>
+<a href="https://www.nuget.org/packages/SuperShortLink.Core"><img alt="nuget release" src="https://img.shields.io/nuget/dt/SuperShortLink.Core" /></a>
+<br />
+<a href="https://chenyuefeng.blog.csdn.net/article/details/130222045">快速开始</a>
+<a href="https://chenyuefeng.blog.csdn.net/article/details/130194794">设计原理</a>
+
+</p>
+
+-----------
+
+# `SuperShortLink`
+> 这是一个基于.NET开源的短链生成及监控系统，它包含了在线生成短链、短链跳转长链、支持短链访问次数以及Web监控页面，可以帮助我们更容易地生成短链、监控短链！
+
+
+-----------
 ## Nuget包
 
 | Package Name |  Version | Downloads
@@ -8,10 +31,6 @@
 
 ---------
 
-# `SuperShortLink`
-> 这是一个基于.NET开源的短链生成及监控系统，它包含了在线生成短链、短链跳转长链、支持短链访问次数以及Web监控页面，可以帮助我们更容易地生成短链、监控短链！
-
--------
 
 ## 功能介绍
 - [x] 基于.NET 6开发的后端及Web管理界面
@@ -21,14 +40,14 @@
 - [x] 支持多种持久化方式：MySQL/PostgreSQL/SqlServer(2012及以上)
 - [x] 傻瓜式配置，开箱即用
 
-------
+-----------
+
 ## 文档
----------
+
 
 1. 快速开始：项目的运行及接入
 ### [快速开始](https://chenyuefeng.blog.csdn.net/article/details/130222045)
 
----------
 
 2. 架构设计及原理：项目的整体架构设计，加解密混淆算法原理
 ### [项目架构设计及算法详解文档](https://chenyuefeng.blog.csdn.net/article/details/130194794)
